@@ -1,8 +1,14 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import RootNav from './Navigation/RootNav';
+import AuthContextProvider from './contexts/AuthContextProvider';
 
 const App = () => {
-  return <Text>My App</Text>;
+  return (
+    <AuthContextProvider>
+      <RootNav />
+    </AuthContextProvider>
+  );
 };
 
 export default App;
