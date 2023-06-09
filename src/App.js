@@ -15,19 +15,19 @@ import ScrollToTop from "./ScrollToTop";
 import ViewImage from "./pages/viewimage/ViewImage";
 import CommentPage from "./pages/commentpage/CommentPage";
 import WritePost from "./pages/writepost/WritePost";
+import { account } from "./appwrite/appwriteConfig";
 
 const App = () => {
   const { auth_state, auth_dispatch } = React.useContext(AuthContext);
   const bootstrapAsync = async () => {
-    const token = await localStorage.getItem("token");
-    if (token) {
+    const isLoggedIn = await account.get();
+    if (isLoggedIn) {
       auth_dispatch({
         type: "LOGIN",
-        payload: token
       });
     } else {
       auth_dispatch({
-        type: "LOGOUT"
+        type: "LOGOUT",
       });
     }
   };

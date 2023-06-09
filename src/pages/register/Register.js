@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { Fade } from "react-reveal";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import { account } from "../../appwrite/appwriteConfig";
+import { v4 as uuidv4 } from "uuid";
 import {
   LoginBackground,
   LoginContainer,
@@ -41,35 +43,39 @@ const Register = () => {
     setName(e.target.value);
   };
 
-  const signup = (e) => {
+  const signup = async (e) => {
     e.preventDefault();
     controlLoading(true);
     const data = {
+      userId: uuidv4(),
       name: name,
       email: email,
       password: password,
     };
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    fetch(`${url}/register`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: myHeaders,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error == null) {
-          history.push("/");
-        } else {
-          setError(data.error);
-          controlLoading(false);
-        }
-      })
-      .catch((err) => {
-        alert(err);
-        controlLoading(false);
-      });
+    const avatar = process.env.REACT_APP_AVATAR;
+    const coverphoto = process.env.REACT_APP_COVERPHOTO;
+
+    try {
+      const response = await account.create(
+        uuidv4(),
+
+        email,
+        password,
+        name,
+        avatar,
+        coverphoto
+      );
+      console.log("Account created successfully");
+      console.log(response);
+      controlLoading(false);
+    } catch (error) {
+      if (error.code === 409) {
+        setError("User with email already exists");
+      }
+      controlLoading(false);
+      console.error("Error creating account:", error);
+    }
   };
 
   return (
