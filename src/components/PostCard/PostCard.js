@@ -21,33 +21,33 @@ import {
   LineBox,
   PostCardDesign,
   Line3,
-  Line4
+  Line4,
 } from "./styles";
 
 //Material UI animation  for pulsating heart
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   like: {
     animation: "$like-button-animation 0.45s",
     animationTimingFunction: "ease-in-out",
-    transform: "scale(1)"
+    transform: "scale(1)",
   },
   liked: {
     animation: "$liked-button-animation 0.45s",
     animationTimingFunction: "ease-in-out",
-    transform: "scale(1)"
+    transform: "scale(1)",
   },
   "@keyframes like-button-animation": {
     "0%": { transform: "scale(1)" },
     "25%": { transform: "scale(1.2)" },
     "50%": { transform: "scale(0.95)" },
-    "100%": { transform: "scale(1)" }
+    "100%": { transform: "scale(1)" },
   },
   "@keyframes liked-button-animation": {
     "0%": { transform: "scale(1)" },
     "25%": { transform: "scale(1.2)" },
     "50%": { transform: "scale(0.95)" },
-    "100%": { transform: "scale(1)" }
-  }
+    "100%": { transform: "scale(1)" },
+  },
 }));
 
 const PostCard = ({ post }) => {
@@ -78,15 +78,15 @@ const PostCard = ({ post }) => {
   const className = pulse ? classes.liked : classes.like;
   const onClick = pulse ? handleUnlike : handleLike;
 
-  const like = id => {
-    const newPost = post_state.posts.map(p =>
+  const like = (id) => {
+    const newPost = post_state.posts.map((p) =>
       p.p_id === id
         ? { ...p, post_liker: user_id, total_likes: p.total_likes + 1 }
         : p
     );
 
     //For user profile posts
-    const newProfilePost = profile_state.user_posts.map(p =>
+    const newProfilePost = profile_state.user_posts.map((p) =>
       p.p_id === id
         ? { ...p, post_liker: user_id, total_likes: p.total_likes + 1 }
         : p
@@ -103,22 +103,22 @@ const PostCard = ({ post }) => {
     fetch(`${url}/like_post`, {
       method: "POST",
       body: JSON.stringify(data),
-      headers: myHeaders
+      headers: myHeaders,
     })
-      .then(res => res.json())
-      .then(data => console.log(data.message))
-      .catch(err => console.log(err));
+      .then((res) => res.json())
+      .then((data) => console.log(data.message))
+      .catch((err) => console.log(err));
   };
 
-  const unlike = id => {
-    const newPost = post_state.posts.map(p =>
+  const unlike = (id) => {
+    const newPost = post_state.posts.map((p) =>
       p.p_id === id
         ? { ...p, post_liker: null, total_likes: p.total_likes - 1 }
         : p
     );
 
     //For handling user profile posts
-    const newProfilePost = profile_state.user_posts.map(p =>
+    const newProfilePost = profile_state.user_posts.map((p) =>
       p.p_id === id
         ? { ...p, post_liker: null, total_likes: p.total_likes - 1 }
         : p
@@ -134,13 +134,13 @@ const PostCard = ({ post }) => {
     fetch(`${url}/unlike_post`, {
       method: "DELETE",
       body: JSON.stringify(data),
-      headers: myHeaders
-    }).then(res => res.json());
+      headers: myHeaders,
+    }).then((res) => res.json());
     // .then(data => alert(data.message));
     // .catch(err=>alert(err))
   };
 
-  const delete_post = id => {
+  const delete_post = (id) => {
     if (window.confirm("Delete Post?")) {
       post_dispatch({ type: "DELETE_POST", payload: id });
       profile_dispatch({ type: "DELETE_POST", payload: id });
@@ -150,13 +150,13 @@ const PostCard = ({ post }) => {
       fetch(`${url}/delete_post`, {
         method: "DELETE",
         body: JSON.stringify(data),
-        headers: myHeaders
+        headers: myHeaders,
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           // alert(data.message);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
@@ -164,14 +164,14 @@ const PostCard = ({ post }) => {
     <div>
       <PostCardDesign
         style={{
-          borderBottom: `1px solid ${theme_state.border}`
+          borderBottom: `1px solid ${theme_state.border}`,
         }}
       >
         <UserImage
           src={post.user_img}
           onClick={() =>
             history.push("/singleprofile", {
-              user_id: post.owner_id
+              user_id: post.owner_id,
             })
           }
         />
@@ -180,14 +180,14 @@ const PostCard = ({ post }) => {
             <LineBox>
               <UserName
                 style={{
-                  color: theme_state.color
+                  color: theme_state.color,
                 }}
               >
                 {post.full_name}
               </UserName>
               <Date
                 style={{
-                  color: theme_state.typoMain
+                  color: theme_state.typoMain,
                 }}
               ></Date>
             </LineBox>
@@ -200,7 +200,7 @@ const PostCard = ({ post }) => {
           </Line1>
           <Line2
             style={{
-              color: theme_state.color
+              color: theme_state.color,
             }}
           >
             <Linkify>{post.post_caption}</Linkify>
@@ -227,7 +227,7 @@ const PostCard = ({ post }) => {
           </Line3>
           <Line4
             style={{
-              color: theme_state.color
+              color: theme_state.color,
             }}
           >
             {post.post_liker == null ? (
@@ -257,7 +257,7 @@ const PostCard = ({ post }) => {
                 history.push("/comment_page", {
                   post_media: post.post_media,
                   post_id: post.p_id,
-                  is_video: post.is_video
+                  is_video: post.is_video,
                 })
               }
             />
