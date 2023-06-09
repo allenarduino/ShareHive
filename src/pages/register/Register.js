@@ -5,6 +5,9 @@ import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { account } from "../../appwrite/appwriteConfig";
 import { v4 as uuidv4 } from "uuid";
+
+import { Formik } from "formik";
+import * as Yup from "yup";
 import {
   LoginBackground,
   LoginContainer,
@@ -16,42 +19,36 @@ import {
   SubMit,
   LoadingButton,
   ErrorMessage,
+  InputErrorText,
 } from "./styles";
 
 const Register = () => {
   const { theme_state } = React.useContext(ThemeContext);
 
   const history = useHistory();
-  const { auth_state } = React.useContext(AuthContext);
-  let url = auth_state.url;
-
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const { auth_dispatch } = React.useContext(AuthContext);
   const [error, setError] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
+  const RegistrationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email")
+      .required("Email is required")
+      .matches(
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+        "Invalid email"
+      ),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
+        "Password must contain at least one letter, one number, and one special character"
+      ),
+  });
 
-  const handle_email_change = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handle_password_change = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handle_name_change = (e) => {
-    setName(e.target.value);
-  };
-
-  const signup = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     controlLoading(true);
-    const data = {
-      userId: uuidv4(),
-      name: name,
-      email: email,
-      password: password,
-    };
 
     const avatar = process.env.REACT_APP_AVATAR;
     const coverphoto = process.env.REACT_APP_COVERPHOTO;
@@ -60,9 +57,9 @@ const Register = () => {
       const response = await account.create(
         uuidv4(),
 
-        email,
-        password,
-        name,
+        values.email,
+        values.password,
+        values.name,
         avatar,
         coverphoto
       );
@@ -89,72 +86,87 @@ const Register = () => {
           >
             Register to ShareHub
           </LoginHeaderText>
-          <Form onSubmit={signup}>
-            <CenterInput>
-              <LoginInput
-                placeholder="Full Name"
-                type="text"
-                required
-                value={name}
-                onChange={handle_name_change}
-              />
-            </CenterInput>
-            <CenterInput>
-              <LoginInput
-                placeholder="Email Address"
-                type="email"
-                required
-                value={email}
-                onChange={handle_email_change}
-              />
-            </CenterInput>
-            <CenterInput>
-              <ErrorMessage>{error}</ErrorMessage>
-            </CenterInput>
-            <CenterInput>
-              <LoginInput
-                placeholder="Password"
-                type="password"
-                required
-                value={password}
-                onChange={handle_password_change}
-              />
-            </CenterInput>
-            <CenterInput>
-              {loading ? (
-                <LoadingButton
-                  style={{ backgroundColor: theme_state.secondaryColor }}
-                >
-                  Loading...
-                </LoadingButton>
-              ) : (
-                <SubMit
-                  type="submit"
-                  value="Register"
-                  required
-                  style={{ backgroundColor: theme_state.secondaryColor }}
-                />
-              )}
-            </CenterInput>
-            <CenterInput>
-              <LinkText
-                style={{
-                  color: theme_state.color,
-                }}
-              >
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  style={{
-                    color: theme_state.secondaryColor,
-                    textDecoration: "none",
-                  }}
-                >
-                  Log in
-                </Link>
-              </LinkText>
-            </CenterInput>
-          </Form>
+          <Formik
+            initialValues={{ name: "", email: "", password: "" }}
+            validationSchema={RegistrationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
+              <Form onSubmit={handleSubmit}>
+                <CenterInput>
+                  <LoginInput
+                    placeholder="Full Name"
+                    type="text"
+                    value={values.name}
+                    onChange={handleChange("name")}
+                  />
+                </CenterInput>
+                {errors.name && touched.name && (
+                  <InputErrorText>{errors.name}</InputErrorText>
+                )}
+                <CenterInput>
+                  <LoginInput
+                    placeholder="Email Address"
+                    type="email"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                  />
+                </CenterInput>
+                {errors.email && touched.email && (
+                  <InputErrorText>{errors.email}</InputErrorText>
+                )}
+                <CenterInput>
+                  <ErrorMessage>{error}</ErrorMessage>
+                </CenterInput>
+                <CenterInput>
+                  <LoginInput
+                    placeholder="Password"
+                    type="password"
+                    required
+                    value={values.password}
+                    onChange={handleChange("password")}
+                  />
+                </CenterInput>
+                {errors.password && touched.password && (
+                  <InputErrorText>{errors.password}</InputErrorText>
+                )}
+                <CenterInput>
+                  {loading ? (
+                    <LoadingButton
+                      style={{ backgroundColor: theme_state.secondaryColor }}
+                    >
+                      Loading...
+                    </LoadingButton>
+                  ) : (
+                    <SubMit
+                      onClick={handleSubmit}
+                      style={{ backgroundColor: theme_state.secondaryColor }}
+                    >
+                      Register
+                    </SubMit>
+                  )}
+                </CenterInput>
+                <CenterInput>
+                  <LinkText
+                    style={{
+                      color: theme_state.color,
+                    }}
+                  >
+                    Already have an account?{" "}
+                    <Link
+                      to="/login"
+                      style={{
+                        color: theme_state.secondaryColor,
+                        textDecoration: "none",
+                      }}
+                    >
+                      Log in
+                    </Link>
+                  </LinkText>
+                </CenterInput>
+              </Form>
+            )}
+          </Formik>
         </LoginContainer>
       </Fade>
     </LoginBackground>
