@@ -6,9 +6,11 @@ export const AuthContext = React.createContext();
 const initialState = {
   isLoggedIn: false,
   loading: true,
+  token: null,
+  url: "http://localhost:5000"
 };
 
-const AuthContextProvider = (props) => {
+const AuthContextProvider = props => {
   const [auth_state, auth_dispatch] = React.useReducer(
     authReducer,
     initialState
