@@ -244,7 +244,7 @@ const PostCard = ({ post }) => {
                 color="red"
                 className={pulse ? "heart" : "null"}
                 fill="red"
-                className={className}
+                // className={className}
                 onClick={() => {
                   unlike(post.p_id);
                   onClick();

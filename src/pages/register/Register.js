@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Fade } from "react-reveal";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
-import { account } from "../../appwrite/appwriteConfig";
+import { account, databases } from "../../appwrite/appwriteConfig";
 import { v4 as uuidv4 } from "uuid";
 
 import { Formik } from "formik";
@@ -47,6 +47,26 @@ const Register = () => {
       ),
   });
 
+  const populateProfile = async (userID, name, avatar, coverphoto) => {
+    controlLoading(true);
+    try {
+      const response = await databases.createDocument(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID,
+        uuidv4(),
+        {
+          userID: userID,
+          name: name,
+          avatar: avatar,
+          coverphoto: coverphoto,
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = async (values) => {
     controlLoading(true);
 
@@ -59,15 +79,14 @@ const Register = () => {
 
         values.email,
         values.password,
-        values.name,
-        avatar,
-        coverphoto
+        values.name
       );
-      console.log("Account created successfully");
       console.log(response);
       await account.createEmailSession(values.email, values.password);
+      populateProfile(response.$id, response.name, avatar, coverphoto);
       controlLoading(false);
-      //auth_dispatch({ type: "LOGIN", payload: await account.get() });
+      auth_dispatch({ type: "LOGIN" });
+      history.push("/");
     } catch (error) {
       if (error.code === 409) {
         setError("User with email already exists");

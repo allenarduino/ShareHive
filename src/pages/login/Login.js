@@ -122,7 +122,7 @@ const Login = () => {
                   >
                     Not having an account?{" "}
                     <Link
-                      to="/login"
+                      to="/"
                       style={{
                         color: theme_state.secondaryColor,
                         textDecoration: "none",
