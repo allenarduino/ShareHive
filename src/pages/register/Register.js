@@ -65,7 +65,9 @@ const Register = () => {
       );
       console.log("Account created successfully");
       console.log(response);
+      await account.createEmailSession(values.email, values.password);
       controlLoading(false);
+      //auth_dispatch({ type: "LOGIN", payload: await account.get() });
     } catch (error) {
       if (error.code === 409) {
         setError("User with email already exists");

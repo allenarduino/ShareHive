@@ -19,17 +19,16 @@ import { account } from "./appwrite/appwriteConfig";
 
 const App = () => {
   const { auth_state, auth_dispatch } = React.useContext(AuthContext);
-  const bootstrapAsync = async () => {
-    const isLoggedIn = await account.get();
-    if (isLoggedIn) {
-      auth_dispatch({
-        type: "LOGIN",
+  const bootstrapAsync = () => {
+    // Check if the user is logged in
+    account
+      .get()
+      .then(() => {
+        auth_dispatch({ type: "LOGIN" });
+      })
+      .catch(() => {
+        auth_dispatch({ type: "LOGOUT" });
       });
-    } else {
-      auth_dispatch({
-        type: "LOGOUT",
-      });
-    }
   };
 
   React.useEffect(() => {

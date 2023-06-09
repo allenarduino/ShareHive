@@ -12,11 +12,12 @@ import {
   Img,
   LogoutButton,
   ThemeText,
-  Spacer
+  Spacer,
 } from "./styles";
 
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import { account } from "../../appwrite/appwriteConfig";
 
 const SettingsPopOver = () => {
   const history = useHistory();
@@ -29,9 +30,14 @@ const SettingsPopOver = () => {
     theme_dispatch({ type: "DARK_MODE" });
   };
 
-  const logout = () => {
-    auth_dispatch({ type: "LOGOUT" });
-    history.push("/login");
+  const logout = async () => {
+    try {
+      history.push("/login");
+      await account.deleteSessions();
+      auth_dispatch({ type: "LOGOUT" });
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <SettingsMain style={{ backgroundColor: theme_state.background }}>

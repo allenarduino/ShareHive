@@ -3,6 +3,10 @@ import { Link, useHistory } from "react-router-dom";
 import { Fade } from "react-reveal";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
+import { account } from "../../appwrite/appwriteConfig";
+
+import { Formik } from "formik";
+import * as Yup from "yup";
 import {
   LoginBackground,
   LoginContainer,
@@ -10,60 +14,44 @@ import {
   Form,
   CenterInput,
   LoginInput,
-  SubMit,
   LinkText,
-  ErrorMessage,
+  SubMit,
   LoadingButton,
+  ErrorMessage,
+  InputErrorText,
 } from "./styles";
 
 const Login = () => {
-  const history = useHistory();
   const { theme_state } = React.useContext(ThemeContext);
-  const { auth_state, auth_dispatch } = React.useContext(AuthContext);
-  let url = auth_state.url;
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const history = useHistory();
+  const { auth_dispatch } = React.useContext(AuthContext);
   const [error, setError] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
 
-  const handle_email_change = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handle_password_change = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const login = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     controlLoading(true);
-    const data = {
-      email: email,
-      password: password,
-    };
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    fetch(`${url}/login`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: myHeaders,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error == null) {
-          auth_dispatch({ type: "LOGIN", payload: data });
-          history.push("/");
-        } else {
-          setError(data.error);
-          controlLoading(false);
-        }
-      })
-      .catch((err) => {
-        alert(err);
-        controlLoading(false);
-      });
+    try {
+      const response = await account.createEmailSession(
+        values.email,
+        values.password
+      );
+      console.log(response);
+      controlLoading(false);
+      auth_dispatch({ type: "LOGIN" });
+      history.push("/");
+    } catch (error) {
+      if (error.code === 401) {
+        setError("Invalid email or password");
+      }
+      controlLoading(false);
+      console.error("Error logging in:", error);
+    }
   };
 
   return (
@@ -75,66 +63,78 @@ const Login = () => {
               color: theme_state.color,
             }}
           >
-            Log in to ShareHub
+            Register to ShareHub
           </LoginHeaderText>
-          <Form onSubmit={login}>
-            <CenterInput>
-              <LoginInput
-                placeholder="Email Address"
-                type="email"
-                required
-                value={email}
-                onChange={handle_email_change}
-              />
-            </CenterInput>
-            <CenterInput>
-              <LoginInput
-                placeholder="Password"
-                type="password"
-                required
-                value={password}
-                onChange={handle_password_change}
-              />
-            </CenterInput>
-            <CenterInput>
-              <ErrorMessage>{error}</ErrorMessage>
-            </CenterInput>
-            <CenterInput>
-              {loading ? (
-                <LoadingButton
-                  style={{ backgroundColor: theme_state.secondaryColor }}
-                >
-                  Loading...
-                </LoadingButton>
-              ) : (
-                <SubMit
-                  placeholder="Password"
-                  type="submit"
-                  value="Log in"
-                  required
-                  style={{ backgroundColor: theme_state.secondaryColor }}
-                />
-              )}
-            </CenterInput>
-            <CenterInput>
-              <LinkText
-                style={{
-                  color: theme_state.color,
-                }}
-              >
-                Don't have an account?{" "}
-                <Link
-                  to="/"
-                  style={{
-                    color: theme_state.secondaryColor,
-                    textDecoration: "none",
-                  }}
-                >
-                  Register
-                </Link>
-              </LinkText>
-            </CenterInput>
-          </Form>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={LoginSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
+              <Form onSubmit={handleSubmit}>
+                <CenterInput>
+                  <LoginInput
+                    placeholder="Email Address"
+                    type="email"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                  />
+                </CenterInput>
+                {errors.email && touched.email && (
+                  <InputErrorText>{errors.email}</InputErrorText>
+                )}
+                <CenterInput>
+                  <ErrorMessage>{error}</ErrorMessage>
+                </CenterInput>
+                <CenterInput>
+                  <LoginInput
+                    placeholder="Password"
+                    type="password"
+                    required
+                    value={values.password}
+                    onChange={handleChange("password")}
+                  />
+                </CenterInput>
+                {errors.password && touched.password && (
+                  <InputErrorText>{errors.password}</InputErrorText>
+                )}
+                <CenterInput>
+                  {loading ? (
+                    <LoadingButton
+                      style={{ backgroundColor: theme_state.secondaryColor }}
+                    >
+                      Loading...
+                    </LoadingButton>
+                  ) : (
+                    <SubMit
+                      onClick={handleSubmit}
+                      style={{ backgroundColor: theme_state.secondaryColor }}
+                    >
+                      Login
+                    </SubMit>
+                  )}
+                </CenterInput>
+                <CenterInput>
+                  <LinkText
+                    style={{
+                      color: theme_state.color,
+                    }}
+                  >
+                    Not having an account?{" "}
+                    <Link
+                      to="/login"
+                      style={{
+                        color: theme_state.secondaryColor,
+                        textDecoration: "none",
+                      }}
+                    >
+                      Register
+                    </Link>
+                  </LinkText>
+                </CenterInput>
+              </Form>
+            )}
+          </Formik>
         </LoginContainer>
       </Fade>
     </LoginBackground>

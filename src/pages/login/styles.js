@@ -24,9 +24,7 @@ export const LoginHeaderText = styled.h4`
   margin-bottom: 30px;
 `;
 
-export const Form = styled.form.attrs({
-  className: "form-group"
-})`
+export const Form = styled.div`
   border-radius: 3px;
   padding: 0 10px;
   padding-top: 3px;
@@ -50,7 +48,7 @@ export const ErrorMessage = styled.b`
   color: red;
 `;
 
-export const SubMit = styled.input`
+export const SubMit = styled.button`
   width: 320px;
   padding-left: 20px;
   font-size: 15px;
@@ -79,4 +77,10 @@ export const LinkText = styled.a`
   font-weight: bold;
   text-decoration: none;
   margin-top: 10px;
+`;
+
+export const InputErrorText = styled.div`
+  color: red;
+  font-size: 15px;
+  text-align: center;
 `;
