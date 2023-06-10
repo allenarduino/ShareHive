@@ -61,88 +61,92 @@ const Login = () => {
   return (
     <LoginBackground style={{ backgroundColor: `${theme_state.background}` }}>
       <LoginGrid>
-        <LoginContainer>
-          <LoginHeaderText
-            style={{
-              color: theme_state.color,
-            }}
-          >
-            Register to ShareHub
-          </LoginHeaderText>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={LoginSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ handleChange, handleSubmit, values, errors, touched }) => (
-              <Form onSubmit={handleSubmit}>
-                <CenterInput>
-                  <LoginInput
-                    placeholder="Email Address"
-                    type="email"
-                    value={values.email}
-                    onChange={handleChange("email")}
-                  />
-                </CenterInput>
-                {errors.email && touched.email && (
-                  <InputErrorText>{errors.email}</InputErrorText>
-                )}
-                <CenterInput>
-                  <ErrorMessage>{error}</ErrorMessage>
-                </CenterInput>
-                <CenterInput>
-                  <LoginInput
-                    placeholder="Password"
-                    type="password"
-                    required
-                    value={values.password}
-                    onChange={handleChange("password")}
-                  />
-                </CenterInput>
-                {errors.password && touched.password && (
-                  <InputErrorText>{errors.password}</InputErrorText>
-                )}
-                <CenterInput>
-                  {loading ? (
-                    <LoadingButton
-                      style={{ backgroundColor: theme_state.secondaryColor }}
-                    >
-                      Loading...
-                    </LoadingButton>
-                  ) : (
-                    <SubMit
-                      onClick={handleSubmit}
-                      style={{ backgroundColor: theme_state.secondaryColor }}
-                    >
-                      Login
-                    </SubMit>
+        <Fade left duration={900} distance="80px">
+          <LoginContainer>
+            <LoginHeaderText
+              style={{
+                color: theme_state.color,
+              }}
+            >
+              Share<span style={{ color: "#e3405f" }}>Hub</span>
+            </LoginHeaderText>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={LoginSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ handleChange, handleSubmit, values, errors, touched }) => (
+                <Form onSubmit={handleSubmit}>
+                  <CenterInput>
+                    <LoginInput
+                      placeholder="Email Address"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange("email")}
+                    />
+                  </CenterInput>
+                  {errors.email && touched.email && (
+                    <InputErrorText>{errors.email}</InputErrorText>
                   )}
-                </CenterInput>
-                <CenterInput>
-                  <LinkText
-                    style={{
-                      color: theme_state.color,
-                    }}
-                  >
-                    Not having an account?{" "}
-                    <Link
-                      to="/"
+                  <CenterInput>
+                    <ErrorMessage>{error}</ErrorMessage>
+                  </CenterInput>
+                  <CenterInput>
+                    <LoginInput
+                      placeholder="Password"
+                      type="password"
+                      required
+                      value={values.password}
+                      onChange={handleChange("password")}
+                    />
+                  </CenterInput>
+                  {errors.password && touched.password && (
+                    <InputErrorText>{errors.password}</InputErrorText>
+                  )}
+                  <CenterInput>
+                    {loading ? (
+                      <LoadingButton
+                        style={{ backgroundColor: theme_state.secondaryColor }}
+                      >
+                        Loading...
+                      </LoadingButton>
+                    ) : (
+                      <SubMit
+                        onClick={handleSubmit}
+                        style={{ backgroundColor: theme_state.secondaryColor }}
+                      >
+                        Login
+                      </SubMit>
+                    )}
+                  </CenterInput>
+                  <CenterInput>
+                    <LinkText
                       style={{
-                        color: theme_state.secondaryColor,
-                        textDecoration: "none",
+                        color: theme_state.color,
                       }}
                     >
-                      Register
-                    </Link>
-                  </LinkText>
-                </CenterInput>
-              </Form>
-            )}
-          </Formik>
-        </LoginContainer>
-        <LoginImageCol>
-          <LoginImage src={landingImg} />
-        </LoginImageCol>
+                      Not having an account?{" "}
+                      <Link
+                        to="/"
+                        style={{
+                          color: theme_state.secondaryColor,
+                          textDecoration: "none",
+                        }}
+                      >
+                        Register
+                      </Link>
+                    </LinkText>
+                  </CenterInput>
+                </Form>
+              )}
+            </Formik>
+          </LoginContainer>
+        </Fade>
+        <Fade right duration={900} distance="80px">
+          <LoginImageCol>
+            <LoginImage src={landingImg} />
+          </LoginImageCol>
+        </Fade>
       </LoginGrid>
     </LoginBackground>
   );

@@ -38,8 +38,12 @@ export const LoginContainer = styled.div`
 export const LoginHeaderText = styled.h4`
   text-align: center;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 35px;
+  font-style: italic;
   margin-bottom: 30px;
+  @media (max-width: ${800}px) {
+    font-size: 25px;
+  }
 `;
 
 /*export const Form = styled.form.attrs({
