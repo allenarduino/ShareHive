@@ -4,6 +4,7 @@ import { Fade } from "react-reveal";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { account, databases } from "../../appwrite/appwriteConfig";
+import landingImg from "../../images/landingImage.avif";
 import { v4 as uuidv4 } from "uuid";
 
 import { Formik } from "formik";
@@ -20,6 +21,9 @@ import {
   LoadingButton,
   ErrorMessage,
   InputErrorText,
+  LoginGrid,
+  LoginImageCol,
+  LoginImage,
 } from "./styles";
 
 const Register = () => {
@@ -98,7 +102,7 @@ const Register = () => {
 
   return (
     <LoginBackground style={{ backgroundColor: `${theme_state.background}` }}>
-      <Fade bottom duration={900} distance="40px">
+      <LoginGrid>
         <LoginContainer>
           <LoginHeaderText
             style={{
@@ -189,7 +193,10 @@ const Register = () => {
             )}
           </Formik>
         </LoginContainer>
-      </Fade>
+        <LoginImageCol>
+          <LoginImage src={landingImg} />
+        </LoginImageCol>
+      </LoginGrid>
     </LoginBackground>
   );
 };
