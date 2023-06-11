@@ -41,13 +41,13 @@ const App = () => {
   return (
     <Router>
       <ScrollToTop />
-      {!auth_state.isLoggedIn ? (
+      {auth_state.isLoggedIn ? (
         <React.Fragment>
           <DeskTopHeader />
           <BottomTab />
         </React.Fragment>
       ) : null}
-      {!auth_state.isLoggedIn ? (
+      {auth_state.isLoggedIn ? (
         <Switch>
           <Layout>
             <Route exact path="/" component={Home} />

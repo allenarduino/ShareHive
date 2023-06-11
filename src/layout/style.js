@@ -4,8 +4,13 @@ export const LayoutBackground = styled.main`
   display: flex;
   justify-content: center;
   width: 100%;
-  min-height: 100hv;
+  height: 100hv;
   column-gap: 1rem;
+
+  @media (max-width: ${800}px) {
+    min-height: 100vh;
+    height: 100%;
+  }
 `;
 
 export const LayoutGrid = styled.div`
@@ -16,6 +21,9 @@ export const LayoutGrid = styled.div`
   width: 90%;
   position: relative;
   top: 0px;
+  @media (max-width: ${800}px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const LeftColumn = styled.div`
@@ -25,6 +33,9 @@ export const LeftColumn = styled.div`
   height: 600px;
   position: sticky;
   top: 0px;
+  @media (max-width: ${800}px) {
+    display: none;
+  }
 `;
 
 export const RightColumn = styled.div`
@@ -34,6 +45,9 @@ export const RightColumn = styled.div`
   height: 600px;
   position: sticky;
   top: 0px;
+  @media (max-width: ${800}px) {
+    display: none;
+  }
 `;
 
 export const MiddleColumn = styled.div`
