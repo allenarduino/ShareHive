@@ -89,7 +89,7 @@ const Register = () => {
       await account.createEmailSession(values.email, values.password);
       populateProfile(response.$id, response.name, avatar, coverphoto);
       controlLoading(false);
-      auth_dispatch({ type: "LOGIN" });
+      auth_dispatch({ type: "LOGIN", payload: response.$id });
       history.push("/");
     } catch (error) {
       if (error.code === 409) {
@@ -110,7 +110,7 @@ const Register = () => {
                 color: theme_state.color,
               }}
             >
-              Share<span style={{ color: "#e3405f" }}>Hub</span>
+              Share<span style={{ color: "#e3405f" }}>Hive</span>
             </LoginHeaderText>
             <Formik
               initialValues={{ name: "", email: "", password: "" }}
@@ -127,9 +127,11 @@ const Register = () => {
                       onChange={handleChange("name")}
                     />
                   </CenterInput>
-                  {errors.name && touched.name && (
-                    <InputErrorText>{errors.name}</InputErrorText>
-                  )}
+                  <CenterInput>
+                    {errors.name && touched.name && (
+                      <InputErrorText>{errors.name}</InputErrorText>
+                    )}
+                  </CenterInput>
                   <CenterInput>
                     <LoginInput
                       placeholder="Email Address"
@@ -138,9 +140,11 @@ const Register = () => {
                       onChange={handleChange("email")}
                     />
                   </CenterInput>
-                  {errors.email && touched.email && (
-                    <InputErrorText>{errors.email}</InputErrorText>
-                  )}
+                  <CenterInput>
+                    {errors.email && touched.email && (
+                      <InputErrorText>{errors.email}</InputErrorText>
+                    )}
+                  </CenterInput>
                   <CenterInput>
                     <ErrorMessage>{error}</ErrorMessage>
                   </CenterInput>
@@ -153,9 +157,11 @@ const Register = () => {
                       onChange={handleChange("password")}
                     />
                   </CenterInput>
-                  {errors.password && touched.password && (
-                    <InputErrorText>{errors.password}</InputErrorText>
-                  )}
+                  <CenterInput>
+                    {errors.password && touched.password && (
+                      <InputErrorText>{errors.password}</InputErrorText>
+                    )}
+                  </CenterInput>
                   <CenterInput>
                     {loading ? (
                       <LoadingButton

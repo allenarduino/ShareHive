@@ -12,9 +12,9 @@ export const HeaderDesign = styled.header`
   display: flex;
   box-shadow: 0px 0px 2px;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0px;
+  left: 0px;
+  right: 0px;
   z-index: 2;
 `;
 

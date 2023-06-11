@@ -4,7 +4,7 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        token: action.payload,
+        userID: action.payload,
         loading: false,
       };
 
@@ -12,7 +12,7 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isLoggedIn: false,
-        token: null,
+        userID: null,
         loading: false,
       };
     default:

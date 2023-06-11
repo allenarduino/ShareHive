@@ -19,7 +19,7 @@ const DeskTopHeader = () => {
             display: "flex",
             alignSelf: "center",
             fontSize: 25,
-            color: theme_state.color
+            color: theme_state.color,
           }}
         >
           Merllon
@@ -32,7 +32,7 @@ const DeskTopHeader = () => {
           <Icon.PlusCircle
             size={25}
             onClick={() => setPop_visible(!Pop_visible)}
-            style={{ color: theme_state.color }}
+            style={{ color: theme_state.color, cursor: "pointor" }}
           />
           <Link to="/profile" style={{ color: theme_state.color }}>
             <Icon.User size={25} />

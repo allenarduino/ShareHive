@@ -20,6 +20,7 @@ import { AuthContext } from "../../contexts/AuthContextProvider";
 import { account } from "../../appwrite/appwriteConfig";
 
 const SettingsPopOver = () => {
+  const [loading, controlLoading] = React.useState(false);
   const history = useHistory();
   const { theme_state, theme_dispatch } = React.useContext(ThemeContext);
   const { auth_dispatch } = React.useContext(AuthContext);
@@ -32,11 +33,14 @@ const SettingsPopOver = () => {
 
   const logout = async () => {
     try {
-      history.push("/login");
+      controlLoading(true);
       await account.deleteSessions();
       auth_dispatch({ type: "LOGOUT" });
+      controlLoading(false);
+      history.push("/login");
     } catch (err) {
       console.log(err);
+      controlLoading(false);
     }
   };
   return (
@@ -61,7 +65,10 @@ const SettingsPopOver = () => {
           />
         </Spacer>
       </Choices>
-      <LogoutButton onClick={() => logout()}>Logout</LogoutButton>
+
+      <LogoutButton onClick={() => logout()}>
+        {loading ? "Loading..." : "Logout"}
+      </LogoutButton>
     </SettingsMain>
   );
 };

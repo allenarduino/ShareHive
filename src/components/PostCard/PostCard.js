@@ -168,10 +168,10 @@ const PostCard = ({ post }) => {
         }}
       >
         <UserImage
-          src={post.user_img}
+          src={post.avatar}
           onClick={() =>
             history.push("/singleprofile", {
-              user_id: post.owner_id,
+              user_id: post.userID,
             })
           }
         />
@@ -183,7 +183,7 @@ const PostCard = ({ post }) => {
                   color: theme_state.color,
                 }}
               >
-                {post.full_name}
+                {post.name}
               </UserName>
               <Date
                 style={{
@@ -203,14 +203,14 @@ const PostCard = ({ post }) => {
               color: theme_state.color,
             }}
           >
-            <Linkify>{post.post_caption}</Linkify>
+            <Linkify>{post.postCaption}</Linkify>
           </Line2>
 
           <Line3 style={{ marginTop: 15 }}>
-            {post.post_media == null ? null : post.is_video == "false" ? (
+            {post.postMedia == null ? null : !post.isVideo ? (
               /** <ImageModal imageUrl={`${url}/${post.post_media}`} />**/
               <img
-                src={post.post_media}
+                src={post.postMedia}
                 style={{ width: "100%" }}
                 onClick={() =>
                   history.push("/view_image", { image: post.post_media })
@@ -218,7 +218,7 @@ const PostCard = ({ post }) => {
               />
             ) : (
               <ReactPlayer
-                url={post.post_media}
+                url={post.postMedia}
                 width="100%"
                 height="100%"
                 controls={true}

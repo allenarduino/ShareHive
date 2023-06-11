@@ -12,13 +12,17 @@ import { Link } from "react-router-dom";
 
 import {
   ContentContainer,
-  RightSide,
   LeftSide,
   Avatar,
   UserCard,
   Middle,
-  BodyWrapp
+  BodyWrapp,
+  PostsColumn,
 } from "./styles";
+import { databases } from "../../appwrite/appwriteConfig";
+import SideNav from "../../components/SideNav/SideNav";
+import { RightSide } from "../../components/UserCard/UserCard";
+import { Layout } from "../../layout/Layout";
 
 const Home = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
@@ -27,61 +31,72 @@ const Home = () => {
 
   let url = auth_state.url;
 
-  const user_id =
-    localStorage.getItem("token") && jwt_decode(localStorage.getItem("token"));
+  const user_id = auth_state.userID;
+  const fetch_posts = async () => {
+    //Just a trial
+    const posts = [];
 
-  const fetch_posts = () => {
-    let myHeaders = new Headers();
-    myHeaders.append(
-      "x-access-token",
-      auth_state.token || localStorage.getItem("token")
-    );
-    fetch(`${url}/posts`, {
-      method: "GET",
-      headers: myHeaders
-    })
-      .then(res => res.json())
-      .then(data => {
-        post_dispatch({ type: "FETCH_POSTS", payload: data.posts });
-        post_dispatch({ type: "FETCH_USER", payload: data.user });
-      })
-      .catch(err => console.log(err));
+    post_dispatch({ type: "FETCH_POSTS", payload: posts });
+
+    /*try {
+      const postsPromise = databases.listDocuments(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_POST_COLLECTION_ID
+      );
+      const usersPromise = databases.listDocuments(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID
+      );
+
+      const [postsResponse, usersResponse] = await Promise.all([
+        postsPromise,
+        usersPromise,
+      ]);
+
+      const posts = postsResponse.documents.map((post) => ({
+        $id: post.$id,
+        userID: post.userID,
+        postCaption: post.postCaption,
+        postMedia: post.postMedia,
+        createdAt: post.createdAt,
+      }));
+
+      const users = usersResponse.documents.reduce((acc, user) => {
+        acc[user.$id] = {
+          userID: user.$id,
+          name: user.name,
+          avatar: user.avatar,
+        };
+        return acc;
+      }, {});
+
+      const postsWithUsers = posts.map((post) => ({
+        ...post,
+        user: users[post.userID],
+      }));
+
+      console.log(postsWithUsers);
+      post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });
+    } catch (error) {
+      console.error("Error fetching posts and users", error);
+    }*/
   };
 
   React.useEffect(() => {
     fetch_posts();
   }, []);
   return (
-    <main>
-      <HomeHeader />
+    <>
       {post_state.posts.length == 0 ? (
         <Loader />
       ) : (
-        <ContentContainer style={{ backgroundColor: theme_state.background }}>
-          <LeftSide
-            style={{ backgroundColor: theme_state.background }}
-          ></LeftSide>
-          <Middle>
-            {post_state.posts.map(post => (
-              <Fade bottom duration={900} distance="40px">
-                <PostCard post={post} />
-              </Fade>
-            ))}
-          </Middle>
-          <RightSide>
-            {post_state.user.map(user => (
-              <UserCard style={{ backgroundColor: theme_state.background }}>
-                <Link to="/profile">
-                  {" "}
-                  <Avatar src={user.user_img} />
-                </Link>
-                <b style={{ color: theme_state.color }}>{user.full_name}</b>
-              </UserCard>
-            ))}
-          </RightSide>
-        </ContentContainer>
+        post_state.posts.map((post) => (
+          <Fade bottom duration={900} distance="40px">
+            <PostCard post={post} />
+          </Fade>
+        ))
       )}
-    </main>
+    </>
   );
 };
 

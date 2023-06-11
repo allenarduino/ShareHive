@@ -16,9 +16,8 @@ import {
   FullName,
   Bio,
   EditProfileButton,
-  Middle
+  Middle,
 } from "./styles";
-import { RightSide, LeftSide } from "../home/styles";
 
 const Profile = () => {
   const history = useHistory();
@@ -36,17 +35,17 @@ const Profile = () => {
     myHeaders.append("x-access-token", localStorage.getItem("token"));
     fetch(`${url}/user_profile/${user_id}`, {
       method: "GET",
-      headers: myHeaders
+      headers: myHeaders,
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         profile_dispatch({ type: "FETCH_PROFILE", payload: data.user_profile });
         profile_dispatch({
           type: "FETCH_USER_POSTS",
-          payload: data.user_posts
+          payload: data.user_posts,
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
   React.useEffect(() => {
     fetch_user();
@@ -58,9 +57,8 @@ const Profile = () => {
         <Loader />
       ) : (
         <ContentContainer style={{ backgroundColor: theme_state.background }}>
-          <LeftSide></LeftSide>
           <Middle>
-            {profile_state.profile.map(profile => (
+            {profile_state.profile.map((profile) => (
               <Fade bottom duration={900} distance="40px">
                 <ProfileContainer>
                   <CoverPhoto
@@ -87,13 +85,12 @@ const Profile = () => {
                 </ProfileContainer>
               </Fade>
             ))}
-            {profile_state.user_posts.map(post => (
+            {profile_state.user_posts.map((post) => (
               <Fade bottom duration={900} distance="40px">
                 <PostCard post={post} />
               </Fade>
             ))}
           </Middle>
-          <RightSide></RightSide>
         </ContentContainer>
       )}
     </main>

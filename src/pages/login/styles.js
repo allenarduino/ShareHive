@@ -65,6 +65,7 @@ export const LoginInput = styled.input`
   border: 0.5px solid whitesmoke;
   background-color: transparent;
   color: #ffff;
+
   @media (max-width: ${800}px) {
     width: 95%;
   }
@@ -117,6 +118,7 @@ export const InputErrorText = styled.div`
   color: red;
   font-size: 15px;
   text-align: center;
+  width: 70%;
 `;
 
 export const LoginImageCol = styled.div`

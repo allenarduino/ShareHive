@@ -20,17 +20,9 @@ const PostImage = () => {
   const history = useHistory();
   const { media_state } = React.useContext(SelectMediaContext);
   const { theme_state } = React.useContext(ThemeContext);
+  const { auth_state, auth_dispatch } = React.useContext(AuthContext);
   const [postCaption, setPostCaption] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
-
-  const getUserID = async () => {
-    try {
-      let response = await account.get();
-      return response.$id;
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handle_post_caption_change = (e) => {
     setPostCaption(e.target.value);
@@ -63,7 +55,8 @@ const PostImage = () => {
         postCaption: postCaption,
         postMedia: await uploadImage(),
         isVideo: false,
-        userID: await getUserID(),
+        userID: auth_state.userID,
+        createdAt: new Date().toISOString(),
       }
     );
 

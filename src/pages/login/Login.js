@@ -33,7 +33,12 @@ const Login = () => {
   const [error, setError] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required"),
+    email: Yup.string()
+      .required("Email is required")
+      .matches(
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+        "Invalid email"
+      ),
     password: Yup.string().required("Password is required"),
   });
 
@@ -47,7 +52,7 @@ const Login = () => {
       );
       console.log(response);
       controlLoading(false);
-      auth_dispatch({ type: "LOGIN" });
+      auth_dispatch({ type: "LOGIN", payload: response.$id });
       history.push("/");
     } catch (error) {
       if (error.code === 401) {
@@ -68,7 +73,7 @@ const Login = () => {
                 color: theme_state.color,
               }}
             >
-              Share<span style={{ color: "#e3405f" }}>Hub</span>
+              Share<span style={{ color: "#e3405f" }}>Hive</span>
             </LoginHeaderText>
             <Formik
               initialValues={{ email: "", password: "" }}
@@ -85,9 +90,11 @@ const Login = () => {
                       onChange={handleChange("email")}
                     />
                   </CenterInput>
-                  {errors.email && touched.email && (
-                    <InputErrorText>{errors.email}</InputErrorText>
-                  )}
+                  <CenterInput>
+                    {errors.email && touched.email && (
+                      <InputErrorText>{errors.email}</InputErrorText>
+                    )}
+                  </CenterInput>
                   <CenterInput>
                     <ErrorMessage>{error}</ErrorMessage>
                   </CenterInput>
@@ -100,9 +107,11 @@ const Login = () => {
                       onChange={handleChange("password")}
                     />
                   </CenterInput>
-                  {errors.password && touched.password && (
-                    <InputErrorText>{errors.password}</InputErrorText>
-                  )}
+                  <CenterInput>
+                    {errors.password && touched.password && (
+                      <InputErrorText>{errors.password}</InputErrorText>
+                    )}
+                  </CenterInput>
                   <CenterInput>
                     {loading ? (
                       <LoadingButton

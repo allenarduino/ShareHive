@@ -126,6 +126,9 @@ export const InputErrorText = styled.div`
   color: red;
   font-size: 15px;
   text-align: center;
+  width: 70%;
+  display: flex;
+  justify-content: center;
 `;
 
 export const LoginImageCol = styled.div`
