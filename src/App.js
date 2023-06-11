@@ -18,6 +18,7 @@ import WritePost from "./pages/writepost/WritePost";
 import { account } from "./appwrite/appwriteConfig";
 import { ThemeContext } from "./contexts/ThemeContextProvider";
 import { Layout } from "./layout/Layout";
+import HomeHeader from "./components/HomeHeader/HomeHeader";
 
 const App = () => {
   const { auth_state, auth_dispatch } = React.useContext(AuthContext);
@@ -44,6 +45,7 @@ const App = () => {
       {auth_state.isLoggedIn ? (
         <React.Fragment>
           <DeskTopHeader />
+          <HomeHeader />
           <BottomTab />
         </React.Fragment>
       ) : null}

@@ -1,58 +1,24 @@
 import React from "react";
 import { PostContext } from "../../contexts/PostContextProvider";
 import { AuthContext } from "../../contexts/AuthContextProvider";
-import { ThemeContext } from "../../contexts/ThemeContextProvider";
-
 import { Fade } from "react-reveal";
 import Loader from "../../components/Loader/Loader";
 import PostCard from "../../components/PostCard/PostCard";
-import HomeHeader from "../../components/HomeHeader/HomeHeader";
-import jwt_decode from "jwt-decode";
-import { Link } from "react-router-dom";
 
-import {
-  ContentContainer,
-  LeftSide,
-  Avatar,
-  UserCard,
-  Middle,
-  BodyWrapp,
-  PostsColumn,
-} from "./styles";
 import { databases } from "../../appwrite/appwriteConfig";
-import SideNav from "../../components/SideNav/SideNav";
-import { RightSide } from "../../components/UserCard/UserCard";
-import { Layout } from "../../layout/Layout";
 
 const Home = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
   const { auth_state } = React.useContext(AuthContext);
-  const { theme_state } = React.useContext(ThemeContext);
-
-  let url = auth_state.url;
 
   const user_id = auth_state.userID;
   const fetch_posts = async () => {
-    //Just a trial
-    const posts = [];
-
-    post_dispatch({ type: "FETCH_POSTS", payload: posts });
-
-    /*try {
-      const postsPromise = databases.listDocuments(
+    try {
+      // Fetch posts
+      const postsResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_POST_COLLECTION_ID
       );
-      const usersPromise = databases.listDocuments(
-        process.env.REACT_APP_APPWRITE_DATABASE_ID,
-        process.env.REACT_APP_PROFILE_COLLECTION_ID
-      );
-
-      const [postsResponse, usersResponse] = await Promise.all([
-        postsPromise,
-        usersPromise,
-      ]);
-
       const posts = postsResponse.documents.map((post) => ({
         $id: post.$id,
         userID: post.userID,
@@ -61,27 +27,34 @@ const Home = () => {
         createdAt: post.createdAt,
       }));
 
+      // Fetch users
+      const userIds = [...new Set(posts.map((post) => post.userID))];
+      const usersResponse = await databases.listDocuments(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID
+      );
       const users = usersResponse.documents.reduce((acc, user) => {
-        acc[user.$id] = {
-          userID: user.$id,
+        acc[user.userID] = {
           name: user.name,
           avatar: user.avatar,
+          coverphoto: user.coverphoto,
         };
         return acc;
       }, {});
 
+      // Merge posts and users
       const postsWithUsers = posts.map((post) => ({
         ...post,
-        user: users[post.userID],
+        name: users[post.userID].name,
+        avatar: users[post.userID].avatar,
       }));
 
       console.log(postsWithUsers);
       post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });
     } catch (error) {
       console.error("Error fetching posts and users", error);
-    }*/
+    }
   };
-
   React.useEffect(() => {
     fetch_posts();
   }, []);

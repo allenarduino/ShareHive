@@ -24,12 +24,20 @@ export const Spacer = styled.div`
 `;
 
 export const HeaderRight = styled.div`
-  @media (max-width: ${769}px) {
-    display: none;
-  }
   display: flex;
   flex-direction: row;
   margin-right: 100px;
   width: 200px;
   justify-content: space-around;
+`;
+
+export const CreatePostButton = styled.button`
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  background-color: #e3405f;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bold;
 `;

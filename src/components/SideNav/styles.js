@@ -24,6 +24,7 @@ export const NavOptionContainer = styled.div`
   justify-content: flex-start;
   padding-left: 100px;
   align-items: center;
+  position: relative;
 `;
 
 export const NavOptionItem = styled.div`
@@ -32,4 +33,25 @@ export const NavOptionItem = styled.div`
   display: flex;
   justify-content: flex-start;
   align-self: flex-start;
+`;
+
+export const LogoutButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+`;
+export const LogoutButton = styled.div`
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #e3405f;
+  margin-top: 80px;
+  width: 100px;
+  align-self: center;
+  bottom: 0px;
+  position: absolute;
+  margin-bottom: 50px;
 `;

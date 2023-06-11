@@ -15,10 +15,12 @@ const HomeHeader = () => {
           style={{
             display: "flex",
             alignSelf: "center",
-            color: theme_state.color
+            color: theme_state.color,
+            fontStyle: "italic",
+            fontSize: 20,
           }}
         >
-          Merllon
+          Share<span style={{ color: "#e3405f" }}>Hive</span>
         </b>
         <Spacer></Spacer>
         <Icon.Settings

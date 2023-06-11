@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-import { HeaderDesign, HeaderRight, Spacer } from "./styles";
+import { CreatePostButton, HeaderDesign, HeaderRight, Spacer } from "./styles";
 import * as Icon from "react-feather";
 import PopOver from "../PopOver/PopOver";
 import SettingsPopOver from "../SettingsPopOver/SettingsPopOver";
@@ -20,25 +20,18 @@ const DeskTopHeader = () => {
             alignSelf: "center",
             fontSize: 25,
             color: theme_state.color,
+            fontStyle: "italic",
           }}
         >
-          Merllon
+          Share<span style={{ color: "#e3405f" }}>Hive</span>
         </b>
         <Spacer></Spacer>
         <HeaderRight>
-          <Link to="/" style={{ color: theme_state.color }}>
-            <Icon.Home size={25} />
-          </Link>
-          <Icon.PlusCircle
-            size={25}
-            onClick={() => setPop_visible(!Pop_visible)}
-            style={{ color: theme_state.color, cursor: "pointor" }}
-          />
-          <Link to="/profile" style={{ color: theme_state.color }}>
-            <Icon.User size={25} />
-          </Link>
+          <CreatePostButton onClick={() => setPop_visible(!Pop_visible)}>
+            Create Post
+          </CreatePostButton>
           <Icon.Settings
-            style={{ color: theme_state.color }}
+            style={{ color: theme_state.color, cursor: "pointer" }}
             onClick={() => setSettingsVisible(!settingsVisible)}
           />
         </HeaderRight>

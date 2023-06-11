@@ -22,6 +22,7 @@ export const OptionsContainer = styled.div`
   justify-content: center;
   margin-top: 20px;
   font-weight: bold;
+  cursor: pointer;
 `;
 //For choosing image and video
 export const FileInput = styled.input`

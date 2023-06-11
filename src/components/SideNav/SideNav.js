@@ -4,10 +4,34 @@ import { ThemeContext } from "../../contexts/ThemeContextProvider";
 
 import { Link } from "react-router-dom";
 
-import { NavOptionContainer, NavOptionItem, SideNavContainer } from "./styles";
+import {
+  NavOptionContainer,
+  NavOptionItem,
+  SideNavContainer,
+  LogoutButton,
+} from "./styles";
+import { AuthContext } from "../../contexts/AuthContextProvider";
+import { account } from "../../appwrite/appwriteConfig";
+import { useHistory } from "react-router-dom";
 
 export const SideNav = () => {
   const { theme_state } = React.useContext(ThemeContext);
+  const { auth_dispatch } = React.useContext(AuthContext);
+  const [loading, controlLoading] = React.useState(false);
+  const history = useHistory();
+
+  const logout = async () => {
+    try {
+      controlLoading(true);
+      await account.deleteSessions();
+      auth_dispatch({ type: "LOGOUT" });
+      controlLoading(false);
+      history.push("/login");
+    } catch (err) {
+      console.log(err);
+      controlLoading(false);
+    }
+  };
 
   return (
     <>
@@ -43,6 +67,10 @@ export const SideNav = () => {
             </NavOptionItem>
           </Link>
         </NavOptionContainer>
+
+        <LogoutButton onClick={() => logout()}>
+          {loading ? "Loading..." : "Logout"}
+        </LogoutButton>
       </SideNavContainer>
     </>
   );

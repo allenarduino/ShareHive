@@ -11,21 +11,21 @@ const PopOver = () => {
   const { media_dispatch } = React.useContext(SelectMediaContext);
   const { theme_state } = React.useContext(ThemeContext);
 
-  const handle_image_change = e => {
+  const handle_image_change = (e) => {
     media_dispatch({
       type: "SELECTED",
       payload1: URL.createObjectURL(e.target.files[0]),
-      payload2: e.target.files[0]
+      payload2: e.target.files[0],
     });
     history.push("/post_image");
   };
 
-  const handle_video_change = e => {
+  const handle_video_change = (e) => {
     history.push("/post_video");
     media_dispatch({
       type: "SELECTED",
       payload1: URL.createObjectURL(e.target.files[0]),
-      payload2: e.target.files[0]
+      payload2: e.target.files[0],
     });
   };
   return (
@@ -54,6 +54,18 @@ const PopOver = () => {
             Add Video <Icon.Video style={{ marginLeft: 10 }} />
           </OptionsContainer>
         </label>
+
+        <OptionsContainer
+          onClick={() => {
+            history.push("/write_post");
+          }}
+        >
+          <b style={{ color: theme_state.color }}>Write Post</b>{" "}
+          <Icon.Feather
+            style={{ marginLeft: 10, color: theme_state.color }}
+            size={25}
+          />
+        </OptionsContainer>
       </Fade>
     </PopOverContainer>
   );
