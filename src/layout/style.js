@@ -4,7 +4,7 @@ export const LayoutBackground = styled.main`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100hv;
+  min-height: 100vh;
   column-gap: 1rem;
 
   @media (max-width: ${800}px) {
