@@ -191,7 +191,7 @@ const PostCard = ({ post }) => {
                 }}
               ></Date>
             </LineBox>
-            {post.owner_id == user_id ? (
+            {post.userID == user_id ? (
               <Icon.Trash
                 onClick={() => delete_post(post.p_id)}
                 style={{ color: "#e3405f" }}
@@ -207,16 +207,11 @@ const PostCard = ({ post }) => {
           </Line2>
 
           <Line3 style={{ marginTop: 15 }}>
-            {post.postMedia == null ? null : !post.isVideo ? (
-              /** <ImageModal imageUrl={`${url}/${post.post_media}`} />**/
-              <img
-                src={post.postMedia}
-                style={{ width: "100%" }}
-                onClick={() =>
-                  history.push("/view_image", { image: post.post_media })
-                }
-              />
-            ) : (
+            {post.type === "image" && (
+              <img src={post.postMedia} style={{ width: "100%" }} />
+            )}
+
+            {post.type === "video" && (
               <ReactPlayer
                 url={post.postMedia}
                 width="100%"

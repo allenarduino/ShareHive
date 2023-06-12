@@ -14,13 +14,13 @@ import {
   HeaderRight,
   Spacer,
 } from "./styles";
-import { account, databases, storage } from "../../appwrite/appwriteConfig";
+import { databases, storage } from "../../appwrite/appwriteConfig";
 
 const PostImage = () => {
   const history = useHistory();
   const { media_state } = React.useContext(SelectMediaContext);
   const { theme_state } = React.useContext(ThemeContext);
-  const { auth_state, auth_dispatch } = React.useContext(AuthContext);
+  const { auth_state } = React.useContext(AuthContext);
   const [postCaption, setPostCaption] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
 
@@ -54,9 +54,8 @@ const PostImage = () => {
         postID: uuidv4(),
         postCaption: postCaption,
         postMedia: await uploadImage(),
-        isVideo: false,
+        type: "image",
         userID: auth_state.userID,
-        createdAt: new Date().toISOString(),
       }
     );
 

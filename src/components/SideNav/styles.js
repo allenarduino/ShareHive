@@ -54,4 +54,5 @@ export const LogoutButton = styled.div`
   bottom: 0px;
   position: absolute;
   margin-bottom: 50px;
+  cursor: pointer;
 `;

@@ -1,55 +1,57 @@
 import React from "react";
 import * as Icon from "react-feather";
+import { v4 as uuidv4 } from "uuid";
 import {
   CenterInput,
   InputField,
   SubmitButton,
   Header,
   HeaderRight,
-  Spacer
+  Spacer,
 } from "./styles";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
+import { databases } from "../../appwrite/appwriteConfig";
 
 const WritePost = () => {
   const history = useHistory();
 
   const { auth_state } = React.useContext(AuthContext);
   const { theme_state } = React.useContext(ThemeContext);
-  const [post_caption, setPostCaption] = React.useState("");
+  const [postCaption, setPostCaption] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
-  let url = auth_state.url;
 
-  const handle_post_caption_change = e => {
+  const handle_post_caption_change = (e) => {
     setPostCaption(e.target.value);
   };
   const create_post = () => {
-    if (post_caption == "") {
+    if (postCaption == "") {
       alert("Please never leave the form empty");
     } else {
       controlLoading(true);
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "x-access-token",
-        auth_state.token || localStorage.getItem("token")
+      const promise = databases.createDocument(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_POST_COLLECTION_ID,
+        uuidv4(),
+        {
+          postID: uuidv4(),
+          postCaption: postCaption,
+          userID: auth_state.userID,
+        }
       );
-      myHeaders.append("Content-Type", "application/json");
-      const data = { post_caption: post_caption };
-      fetch(`${url}/write_post`, {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify(data)
-      })
-        .then(res => res.json())
-        .then(data => {
+
+      promise.then(
+        function (response) {
+          console.log(response);
           controlLoading(false);
           history.push("/");
-        })
-        .catch(err => {
-          console.log(err);
+        },
+        function (error) {
+          console.log(error);
           controlLoading(false);
-        });
+        }
+      );
     }
   };
 
@@ -59,7 +61,7 @@ const WritePost = () => {
         display: "flex",
         height: "100vh",
         justifyContent: "center",
-        backgroundColor: theme_state.background
+        backgroundColor: theme_state.background,
       }}
     >
       <Header style={{ backgroundColor: theme_state.background }}>
@@ -87,11 +89,11 @@ const WritePost = () => {
           onChange={handle_post_caption_change}
           type="text"
           autoFocus
-          value={post_caption}
+          value={postCaption}
           name="post_caption"
           style={{
             backgroundColor: theme_state.background,
-            color: theme_state.color
+            color: theme_state.color,
           }}
         />
 

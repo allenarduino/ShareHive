@@ -37,7 +37,7 @@ const PopOver = () => {
               type="file"
               required
               onChange={handle_image_change}
-              accept="image/x-png,image/jpeg,image/jpg"
+              accept="image/x-png,image/jpeg,image/jpg/*"
             />
             Add Photo{" "}
             <Icon.Image style={{ marginLeft: 10, color: theme_state.color }} />

@@ -6,18 +6,21 @@ import Loader from "../../components/Loader/Loader";
 import PostCard from "../../components/PostCard/PostCard";
 
 import { databases } from "../../appwrite/appwriteConfig";
+import { Query } from "appwrite";
 
 const Home = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
   const { auth_state } = React.useContext(AuthContext);
 
   const user_id = auth_state.userID;
+
   const fetch_posts = async () => {
     try {
       // Fetch posts
       const postsResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
-        process.env.REACT_APP_POST_COLLECTION_ID
+        process.env.REACT_APP_POST_COLLECTION_ID,
+        [Query.orderDesc("$createdAt")]
       );
       const posts = postsResponse.documents.map((post) => ({
         $id: post.$id,
@@ -25,6 +28,7 @@ const Home = () => {
         postCaption: post.postCaption,
         postMedia: post.postMedia,
         createdAt: post.createdAt,
+        type: post.type,
       }));
 
       // Fetch users
@@ -47,7 +51,22 @@ const Home = () => {
         ...post,
         name: users[post.userID].name,
         avatar: users[post.userID].avatar,
+        user: [
+          {
+            userID: post.userID,
+            name: users[post.userID].name,
+            avatar: users[post.userID].avatar,
+          },
+        ],
       }));
+
+      const response = await databases.listDocuments(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID,
+        [Query.equal("userID", user_id)]
+      );
+      console.log(response);
+      post_dispatch({ type: "FETCH_USER", payload: response.documents });
 
       console.log(postsWithUsers);
       post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });

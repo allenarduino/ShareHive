@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Storage } from "appwrite";
+import { Client, Account, Databases, Storage, Query } from "appwrite";
 export const client = new Client();
 
 // Configure the endpoint and project ID
@@ -9,3 +9,5 @@ client
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const storage = new Storage(client);
+
+export const query = new Query();

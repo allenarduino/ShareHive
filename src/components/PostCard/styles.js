@@ -13,12 +13,13 @@ export const UserImageWrapper = styled.div`
   height: 50px;
   overflow: hidden;
   border-radius: 50px;
+  cursor: pointer;
 `;
 
 export const UserImage = styled.img`
   width: 50px;
   height: 50px;
-  border-radius: 50px;
+  border-radius: 10px;
   cursor: pointer;
 `;
 
@@ -47,6 +48,7 @@ export const UserName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 5px;
+  cursor: pointer;
 `;
 
 export const Date = styled.span`
@@ -99,7 +101,7 @@ export const Line2 = styled.div`
 export const Line3 = styled.div`
   width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: 600px;
   overflow: hidden;
   border-radius: 15px;
 `;

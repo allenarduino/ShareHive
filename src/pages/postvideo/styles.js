@@ -54,4 +54,5 @@ export const SubmitButton = styled.button`
   color: #fff;
   border: 2px solid #e3405f;
   background-color: #e3405f;
+  cursor: pointer;
 `;

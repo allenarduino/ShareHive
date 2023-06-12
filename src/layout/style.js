@@ -51,8 +51,11 @@ export const RightColumn = styled.div`
 `;
 
 export const MiddleColumn = styled.div`
-  margin-top: 150px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: relative;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
 `;
