@@ -23,6 +23,7 @@ import {
   Line3,
   Line4,
 } from "./styles";
+import { databases } from "../../appwrite/appwriteConfig";
 
 //Material UI animation  for pulsating heart
 const useStyles = makeStyles((theme) => ({
@@ -60,10 +61,6 @@ const PostCard = ({ post }) => {
 
   //For handling heart animation
   const [pulse, setPulse] = React.useState(false);
-  let url = auth_state.url;
-
-  const user_id =
-    localStorage.getItem("token") && jwt_decode(localStorage.getItem("token"));
 
   //For heart pulse animation
   function handleLike() {
@@ -81,14 +78,22 @@ const PostCard = ({ post }) => {
   const like = (id) => {
     const newPost = post_state.posts.map((p) =>
       p.p_id === id
-        ? { ...p, post_liker: user_id, total_likes: p.total_likes + 1 }
+        ? {
+            ...p,
+            post_liker: auth_state.user_id,
+            total_likes: p.total_likes + 1,
+          }
         : p
     );
 
     //For user profile posts
     const newProfilePost = profile_state.user_posts.map((p) =>
       p.p_id === id
-        ? { ...p, post_liker: user_id, total_likes: p.total_likes + 1 }
+        ? {
+            ...p,
+            post_liker: auth_state.user_id,
+            total_likes: p.total_likes + 1,
+          }
         : p
     );
 
@@ -96,18 +101,6 @@ const PostCard = ({ post }) => {
     profile_dispatch({ type: "FETCH_USER_POSTS", payload: newProfilePost });
 
     //Sending like details to server
-    let myHeaders = new Headers();
-    myHeaders.append("x-access-token", localStorage.getItem("token"));
-    myHeaders.append("Content-Type", "application/json");
-    const data = { post_id: id };
-    fetch(`${url}/like_post`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: myHeaders,
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data.message))
-      .catch((err) => console.log(err));
   };
 
   const unlike = (id) => {
@@ -128,35 +121,21 @@ const PostCard = ({ post }) => {
     profile_dispatch({ type: "FETCH_USER_POSTS", payload: newProfilePost });
 
     //Sending like details to server
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const data = { post_id: id };
-    fetch(`${url}/unlike_post`, {
-      method: "DELETE",
-      body: JSON.stringify(data),
-      headers: myHeaders,
-    }).then((res) => res.json());
-    // .then(data => alert(data.message));
-    // .catch(err=>alert(err))
   };
 
   const delete_post = (id) => {
     if (window.confirm("Delete Post?")) {
-      post_dispatch({ type: "DELETE_POST", payload: id });
-      profile_dispatch({ type: "DELETE_POST", payload: id });
-      let myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      const data = { post_id: id };
-      fetch(`${url}/delete_post`, {
-        method: "DELETE",
-        body: JSON.stringify(data),
-        headers: myHeaders,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          // alert(data.message);
-        })
-        .catch((err) => console.log(err));
+      try {
+        post_dispatch({ type: "DELETE_POST", payload: id });
+        const response = databases.deleteDocument(
+          process.env.REACT_APP_APPWRITE_DATABASE_ID,
+          process.env.REACT_APP_POST_COLLECTION_ID,
+          id
+        );
+        console.log(response);
+      } catch (err) {
+        console.log(id);
+      }
     }
   };
 
@@ -191,9 +170,9 @@ const PostCard = ({ post }) => {
                 }}
               ></Date>
             </LineBox>
-            {post.userID == user_id ? (
+            {post.userID == auth_state.userID ? (
               <Icon.Trash
-                onClick={() => delete_post(post.p_id)}
+                onClick={() => delete_post(post.$id)}
                 style={{ color: "#e3405f" }}
               />
             ) : null}

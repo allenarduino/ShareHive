@@ -3,29 +3,29 @@ export const postReducer = (state, action) => {
     case "ADD_POST":
       return {
         ...state,
-        posts: [action.payload, ...state.posts]
+        posts: [action.payload, ...state.posts],
       };
     case "FETCH_POSTS":
       return {
         ...state,
-        posts: action.payload
+        posts: action.payload,
       };
     case "FETCH_USER":
       return {
         ...state,
-        user: action.payload
+        user: action.payload,
       };
 
     case "DELETE_POST":
       return {
         ...state,
-        posts: state.posts.filter(post => post.p_id !== action.payload)
+        posts: state.posts.filter((post) => post.$id !== action.payload),
       };
 
     case "POST_SENDING":
       return {
         ...state,
-        post_sending: true
+        post_sending: true,
       };
 
     default:
