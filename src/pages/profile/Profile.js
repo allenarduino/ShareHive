@@ -77,13 +77,6 @@ const Profile = () => {
         ...post,
         name: users[post.userID].name,
         avatar: users[post.userID].avatar,
-        user: [
-          {
-            userID: post.userID,
-            name: users[post.userID].name,
-            avatar: users[post.userID].avatar,
-          },
-        ],
       }));
 
       post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });

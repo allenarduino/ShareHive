@@ -51,13 +51,6 @@ const Home = () => {
         ...post,
         name: users[post.userID].name,
         avatar: users[post.userID].avatar,
-        user: [
-          {
-            userID: post.userID,
-            name: users[post.userID].name,
-            avatar: users[post.userID].avatar,
-          },
-        ],
       }));
 
       const response = await databases.listDocuments(

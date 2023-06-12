@@ -75,13 +75,6 @@ const SingleProfile = () => {
         ...post,
         name: users[post.userID].name,
         avatar: users[post.userID].avatar,
-        user: [
-          {
-            userID: post.userID,
-            name: users[post.userID].name,
-            avatar: users[post.userID].avatar,
-          },
-        ],
       }));
 
       post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });
@@ -107,7 +100,7 @@ const SingleProfile = () => {
                 {profile.name}
               </FullName>
               <Bio style={{ color: theme_state.color }}>{profile.bio}</Bio>
-              {user_id == profile.userID ? (
+              {user_id === profile.userID ? (
                 <EditProfileButton onClick={() => history.push("/editprofile")}>
                   Edit Profile
                 </EditProfileButton>
