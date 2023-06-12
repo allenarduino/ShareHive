@@ -12,8 +12,6 @@ const Home = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
   const { auth_state } = React.useContext(AuthContext);
 
-  const user_id = auth_state.userID;
-
   const fetch_posts = async () => {
     try {
       // Fetch posts
@@ -56,7 +54,7 @@ const Home = () => {
       const response = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_PROFILE_COLLECTION_ID,
-        [Query.equal("userID", user_id)]
+        [Query.equal("userID", auth_state.userID)]
       );
       console.log(response);
       post_dispatch({ type: "FETCH_USER", payload: response.documents });

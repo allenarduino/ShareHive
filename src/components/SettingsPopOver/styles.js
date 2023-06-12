@@ -80,4 +80,5 @@ export const LogoutButton = styled.div`
   margin-top: 80px;
   width: 100px;
   align-self: center;
+  cursor: pointer;
 `;

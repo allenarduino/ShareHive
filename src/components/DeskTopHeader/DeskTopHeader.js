@@ -21,6 +21,7 @@ const DeskTopHeader = () => {
             fontSize: 25,
             color: theme_state.color,
             fontStyle: "italic",
+            cursor: "pointer",
           }}
         >
           Share<span style={{ color: "#e3405f" }}>Hive</span>

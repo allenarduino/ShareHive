@@ -28,18 +28,16 @@ const Profile = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
   const { theme_state } = React.useContext(ThemeContext);
 
-  let user_id = auth_state.userID;
-
   const fetch_user = async () => {
     try {
       //fetch profile
       const usersResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_PROFILE_COLLECTION_ID,
-        [Query.equal("userID", user_id)]
+        [Query.equal("userID", auth_state.userID)]
       );
       console.log(usersResponse);
-      console.log(user_id);
+      console.log(auth_state.userID);
       profile_dispatch({
         type: "FETCH_PROFILE",
         payload: usersResponse.documents,
@@ -51,7 +49,7 @@ const Profile = () => {
       const postsResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_POST_COLLECTION_ID,
-        [Query.equal("userID", user_id)]
+        [Query.equal("userID", auth_state.userID)]
       );
 
       const posts = postsResponse.documents.map((post) => ({

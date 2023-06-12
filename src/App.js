@@ -16,14 +16,13 @@ import ViewImage from "./pages/viewimage/ViewImage";
 import CommentPage from "./pages/commentpage/CommentPage";
 import WritePost from "./pages/writepost/WritePost";
 import { account } from "./appwrite/appwriteConfig";
-import { ThemeContext } from "./contexts/ThemeContextProvider";
 import { Layout } from "./layout/Layout";
 import HomeHeader from "./components/HomeHeader/HomeHeader";
+import LauncherPage from "./pages/launcherpage/LauncherPage";
 
 const App = () => {
   const { auth_state, auth_dispatch } = React.useContext(AuthContext);
-  const { theme_state, theme_dispatch } = React.useContext(ThemeContext);
-  const checkAuth = () => {
+  const checkAuth = async () => {
     // Check if the user is logged in
     account
       .get()
@@ -41,6 +40,7 @@ const App = () => {
   }, []);
   return (
     <Router>
+      {auth_state.loading ? <LauncherPage /> : null}
       <ScrollToTop />
       {auth_state.isLoggedIn ? (
         <React.Fragment>
