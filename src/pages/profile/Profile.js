@@ -23,7 +23,7 @@ const Profile = () => {
   const history = useHistory();
   const { auth_state } = React.useContext(AuthContext);
   const { profile_state, profile_dispatch } = React.useContext(ProfileContext);
-  const { post_state, post_dispatch } = React.useContext(PostContext);
+  const { post_dispatch } = React.useContext(PostContext);
   const { theme_state } = React.useContext(ThemeContext);
 
   const fetch_user = async () => {

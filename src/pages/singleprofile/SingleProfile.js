@@ -18,7 +18,6 @@ import {
 import { databases } from "../../appwrite/appwriteConfig";
 import { Query } from "appwrite";
 import { PostContext } from "../../contexts/PostContextProvider";
-
 const SingleProfile = () => {
   const history = useHistory();
   const location = useLocation();
@@ -70,7 +69,7 @@ const SingleProfile = () => {
   };
   React.useEffect(() => {
     fetch_user();
-  });
+  }, []);
 
   return (
     <>
