@@ -1,17 +1,20 @@
 import React from "react";
 import { HeaderDesign, HeaderRight, Spacer } from "./styles";
+import { useHistory } from "react-router-dom";
 import * as Icon from "react-feather";
 import SettingsPopOver from "../SettingsPopOver/SettingsPopOver";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 
 //Header for home on phone screen sizes
 const HomeHeader = () => {
+  const history = useHistory();
   const [settingsVisible, setSettingsVisible] = React.useState(false);
   const { theme_state } = React.useContext(ThemeContext);
   return (
     <div>
       <HeaderDesign style={{ backgroundColor: theme_state.background }}>
         <b
+          onClick={() => history.push("/")}
           style={{
             display: "flex",
             alignSelf: "center",

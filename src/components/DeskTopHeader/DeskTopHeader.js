@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { CreatePostButton, HeaderDesign, HeaderRight, Spacer } from "./styles";
 import * as Icon from "react-feather";
 import PopOver from "../PopOver/PopOver";
@@ -8,6 +8,7 @@ import { ThemeContext } from "../../contexts/ThemeContextProvider";
 
 //General Header for Desktop
 const DeskTopHeader = () => {
+  const history = useHistory();
   const [Pop_visible, setPop_visible] = React.useState(false);
   const [settingsVisible, setSettingsVisible] = React.useState(false);
   const { theme_state } = React.useContext(ThemeContext);
@@ -15,6 +16,7 @@ const DeskTopHeader = () => {
     <div>
       <HeaderDesign style={{ backgroundColor: theme_state.background }}>
         <b
+          onClick={() => history.push("/")}
           style={{
             display: "flex",
             alignSelf: "center",
