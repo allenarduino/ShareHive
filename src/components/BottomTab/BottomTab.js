@@ -6,7 +6,7 @@ import Sheet from "react-modal-sheet";
 import { SelectMediaContext } from "../../contexts/SelectMediaContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 
-const BottomTab = props => {
+const BottomTab = (props) => {
   const location = useLocation();
   const history = useHistory();
   const [isOpen, setOpen] = React.useState(false);
@@ -14,22 +14,22 @@ const BottomTab = props => {
   const { media_dispatch } = React.useContext(SelectMediaContext);
   const { theme_state } = React.useContext(ThemeContext);
 
-  const handle_image_change = e => {
+  const handle_image_change = (e) => {
     media_dispatch({
       type: "SELECTED",
       payload1: URL.createObjectURL(e.target.files[0]),
-      payload2: e.target.files[0]
+      payload2: e.target.files[0],
     });
     history.push("/post_image");
     setOpen(false);
   };
 
-  const handle_video_change = e => {
+  const handle_video_change = (e) => {
     history.push("/post_video");
     media_dispatch({
       type: "SELECTED",
       payload1: URL.createObjectURL(e.target.files[0]),
-      payload2: e.target.files[0]
+      payload2: e.target.files[0],
     });
     setOpen(false);
   };
@@ -88,12 +88,16 @@ const BottomTab = props => {
           )}
         </BnTab>
         {/*****************Modal*************** */}
-        <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
+        <Sheet
+          isOpen={isOpen}
+          onClose={() => setOpen(false)}
+          detent="content-height"
+        >
           <Sheet.Container
             style={{
               height: 250,
               paddingLeft: 20,
-              backgroundColor: theme_state.background
+              backgroundColor: theme_state.background,
             }}
           >
             <Sheet.Header />
