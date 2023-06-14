@@ -2,7 +2,7 @@ import React from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { ProfileContext } from "../../contexts/ProfileContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import PostCard from "../../components/PostCard/PostCard";
 import { Fade } from "react-reveal";
@@ -21,10 +21,12 @@ import { PostContext } from "../../contexts/PostContextProvider";
 
 const SingleProfile = () => {
   const history = useHistory();
-  const { auth_state } = React.useContext(AuthContext);
+  const location = useLocation();
   const { profile_state, profile_dispatch } = React.useContext(ProfileContext);
-  const { post_state, post_dispatch } = React.useContext(PostContext);
+  const { post_dispatch } = React.useContext(PostContext);
   const { theme_state } = React.useContext(ThemeContext);
+
+  const user_id = location.state.user_id;
 
   const fetch_user = async () => {
     try {
@@ -32,7 +34,7 @@ const SingleProfile = () => {
       const postsResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_POST_COLLECTION_ID,
-        [Query.equal("userID", auth_state.userID)],
+        [Query.equal("userID", user_id)],
         [Query.orderDesc("$createdAt")]
       );
 
@@ -40,7 +42,7 @@ const SingleProfile = () => {
       const userResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_PROFILE_COLLECTION_ID,
-        [Query.equal("userID", auth_state.userID)]
+        [Query.equal("userID", user_id)]
       );
       console.log(userResponse);
       post_dispatch({ type: "FETCH_USER", payload: userResponse.documents });
@@ -68,7 +70,7 @@ const SingleProfile = () => {
   };
   React.useEffect(() => {
     fetch_user();
-  }, []);
+  });
 
   return (
     <>
