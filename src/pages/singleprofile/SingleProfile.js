@@ -23,6 +23,7 @@ const SingleProfile = () => {
   const location = useLocation();
   const { profile_state, profile_dispatch } = React.useContext(ProfileContext);
   const { post_dispatch } = React.useContext(PostContext);
+  const { auth_state } = React.useContext(AuthContext);
   const { theme_state } = React.useContext(ThemeContext);
 
   const user_id = location.state.user_id;
@@ -85,9 +86,11 @@ const SingleProfile = () => {
                 {profile.name}
               </FullName>
               <Bio style={{ color: theme_state.color }}>{profile.bio}</Bio>
-              <EditProfileButton onClick={() => history.push("/editprofile")}>
-                Edit Profile
-              </EditProfileButton>
+              {profile.userID === auth_state.userID && (
+                <EditProfileButton onClick={() => history.push("/editprofile")}>
+                  Edit Profile
+                </EditProfileButton>
+              )}
             </ProfileContainer>
           </Fade>
         ))
