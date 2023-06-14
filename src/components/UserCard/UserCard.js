@@ -3,14 +3,14 @@ import { UserCardContainer, Avatar } from "./styles";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import { Link } from "react-router-dom";
-import { PostContext } from "../../contexts/PostContextProvider";
+import { ProfileContext } from "../../contexts/ProfileContextProvider";
 
 export const UserCard = () => {
-  const { post_state } = React.useContext(PostContext);
+  const { profile_state } = React.useContext(ProfileContext);
   const { theme_state } = React.useContext(ThemeContext);
   return (
     <UserCardContainer>
-      {post_state.user.map((user) => (
+      {profile_state.currentUserDetails.map((user) => (
         <>
           <Link to="/profile">
             {" "}

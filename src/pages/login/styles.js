@@ -94,7 +94,6 @@ export const SubMit = styled.button`
 
 export const LoadingButton = styled.button`
   width: 85%;
-  width: 320px;
   padding-left: 20px;
   font-size: 15px;
   font-weight: bold;

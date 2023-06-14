@@ -10,12 +10,10 @@ export const profileReducer = (state, action) => {
         ...state,
         profilePosts: action.payload,
       };
-    case "DELETE_POST":
+    case "FETCH_CURRENT_USER":
       return {
         ...state,
-        profilePosts: state.profilePosts.filter(
-          (post) => post.p_id !== action.payload
-        ),
+        currentUserDetails: action.payload,
       };
 
     default:

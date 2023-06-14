@@ -10,11 +10,6 @@ export const postReducer = (state, action) => {
         ...state,
         posts: action.payload,
       };
-    case "FETCH_USER":
-      return {
-        ...state,
-        user: action.payload,
-      };
 
     case "DELETE_POST":
       return {

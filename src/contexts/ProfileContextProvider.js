@@ -5,6 +5,7 @@ export const ProfileContext = React.createContext();
 const initialState = {
   profile: [],
   profilePosts: [],
+  currentUserDetails: [],
 };
 
 const PostContextProvider = (props) => {

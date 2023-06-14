@@ -7,10 +7,12 @@ import PostCard from "../../components/PostCard/PostCard";
 
 import { databases } from "../../appwrite/appwriteConfig";
 import { Query } from "appwrite";
+import { ProfileContext } from "../../contexts/ProfileContextProvider";
 
 const Home = () => {
   const { post_state, post_dispatch } = React.useContext(PostContext);
   const { auth_state } = React.useContext(AuthContext);
+  const { profile_dispatch } = React.useContext(ProfileContext);
 
   const fetch_posts = async () => {
     try {
@@ -49,7 +51,10 @@ const Home = () => {
         [Query.equal("userID", auth_state.userID)]
       );
       console.log(response);
-      post_dispatch({ type: "FETCH_USER", payload: response.documents });
+      profile_dispatch({
+        type: "FETCH_CURRENT_USER",
+        payload: response.documents,
+      });
     } catch (error) {
       console.error("Error fetching posts and users", error);
     }

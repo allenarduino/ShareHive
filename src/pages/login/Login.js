@@ -53,6 +53,7 @@ const Login = () => {
       console.log(response);
       controlLoading(false);
       auth_dispatch({ type: "LOGIN", payload: response.$id });
+
       history.push("/");
     } catch (error) {
       if (error.code === 401) {

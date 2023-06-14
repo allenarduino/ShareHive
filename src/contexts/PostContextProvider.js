@@ -4,11 +4,10 @@ import { postReducer } from "../reducers/PostReducer";
 export const PostContext = React.createContext();
 const initialState = {
   posts: [],
-  user: [],
-  post_sending: false
+  post_sending: false,
 };
 
-const PostContextProvider = props => {
+const PostContextProvider = (props) => {
   const [post_state, post_dispatch] = React.useReducer(
     postReducer,
     initialState

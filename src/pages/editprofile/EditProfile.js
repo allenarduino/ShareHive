@@ -2,9 +2,9 @@ import React from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { ProfileContext } from "../../contexts/ProfileContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
-import jwt_decode from "jwt-decode";
 import { Fade } from "react-reveal";
 import * as Icon from "react-feather";
+import { v4 as uuidv4 } from "uuid";
 import {
   MainContainer,
   ContentConatainer,
@@ -13,11 +13,11 @@ import {
   UserImg,
   NameInput,
   BioInput,
-  SaveButton,
   FileInput,
   InputContainer,
-  BioInputContainer
+  BioInputContainer,
 } from "./styles";
+import { databases, storage } from "../../appwrite/appwriteConfig";
 
 const EditProfile = () => {
   const [user_img, setUser_img] = React.useState(null);
@@ -28,145 +28,170 @@ const EditProfile = () => {
   const [user_img_selected, setUserImgSelected] = React.useState(false);
   const [name, setName] = React.useState("");
   const [bio, setBio] = React.useState("");
-  const [loadingUser_img, controlUserImageLoading] = React.useState(false);
+  const [loadingAvatar, controlAvatarLoading] = React.useState(false);
   const [loadingCoverphoto, controlCoverphotoLoading] = React.useState(false);
   const [loadingName, controlNameLoading] = React.useState(false);
   const [loadingBio, controlBioLoading] = React.useState(false);
-  const { auth_state } = React.useContext(AuthContext);
   const { profile_state } = React.useContext(ProfileContext);
   const { theme_state } = React.useContext(ThemeContext);
-  let url = auth_state.url;
 
-  const user_id =
-    localStorage.getItem("token") && jwt_decode(localStorage.getItem("token"));
+  const profileDocumentID = profile_state.currentUserDetails.map((profile) => {
+    return profile.$id;
+  })[0];
 
-  const handle_name_change = e => {
+  const handle_name_change = (e) => {
     setName(e.target.value);
   };
 
-  const handle_bio_change = e => {
+  const handle_bio_change = (e) => {
     setBio(e.target.value);
   };
 
-  const handle_coverphoto_change = e => {
+  const handle_coverphoto_change = (e) => {
     setCoverphotoPreview(URL.createObjectURL(e.target.files[0]));
     setCoverphoto(e.target.files[0]);
     setCoverphotoSelected(true);
   };
-  const handle_user_img_change = e => {
+  const handle_user_img_change = (e) => {
     setUser_imgPreview(URL.createObjectURL(e.target.files[0]));
     setUser_img(e.target.files[0]);
     setUserImgSelected(true);
   };
 
-  const update_coverphoto = () => {
-    controlCoverphotoLoading(true);
-
-    const data = new FormData();
-    data.append("coverphoto", coverphoto);
-
-    let myHeaders = new Headers();
-    myHeaders.append(
-      "x-access-token",
-      auth_state.token || localStorage.getItem("token")
-    );
-    fetch(`${url}/update_coverphoto`, {
-      method: "POST",
-      body: data,
-      headers: myHeaders
-    })
-      .then(res => res.json())
-      .then(data => {
-        controlCoverphotoLoading(false);
-        alert("Coverphoto updated");
-      })
-      .catch(err => {
-        controlCoverphotoLoading(false);
-        alert(err);
-      });
-  };
-
-  const update_user_img = () => {
-    controlUserImageLoading(true);
-
-    const data = new FormData();
-    data.append("user_img", user_img);
-
-    let myHeaders = new Headers();
-    myHeaders.append(
-      "x-access-token",
-      auth_state.token || localStorage.getItem("token")
-    );
-    fetch(`${url}/update_user_img`, {
-      method: "POST",
-      body: data,
-      headers: myHeaders
-    })
-      .then(res => res.json())
-      .then(data => {
-        controlUserImageLoading(false);
-
-        alert("Profile Photo Updated");
-      })
-      .catch(err => {
-        controlUserImageLoading(false);
-        alert(err);
-      });
-  };
-
-  const update_name = () => {
-    if (name == "") {
-      alert("Name must not be empty");
-    } else {
-      controlNameLoading(true);
-      const myHeaders = new Headers();
-      myHeaders.append(
-        "x-access-token",
-        auth_state.token || localStorage.getItem("token")
+  const uploadCoverPhoto = async () => {
+    try {
+      const response = await storage.createFile(
+        process.env.REACT_APP_BUCKET_ID,
+        uuidv4(),
+        coverphoto
       );
-      myHeaders.append("Content-Type", "application/json");
-      fetch(`${url}/update_name`, {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify({ name: name })
-      })
-        .then(res => res.json())
-        .then(data => {
-          controlNameLoading(false);
-          alert(data.message);
-        })
-        .catch(err => {
-          console.log(err);
-          controlNameLoading(false);
-        });
+      const fileId = response.$id;
+      const fileURL = `https://cloud.appwrite.io/v1/storage/buckets/${process.env.REACT_APP_BUCKET_ID}/files/${fileId}/view?project=${process.env.REACT_APP_APPWRITE_PROJECT_ID}&mode=admin`;
+
+      return fileURL;
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const update_bio = () => {
+  const uploadAvatar = async () => {
+    try {
+      const response = await storage.createFile(
+        process.env.REACT_APP_BUCKET_ID,
+        uuidv4(),
+        user_img
+      );
+      const fileId = response.$id;
+      const fileURL = `https://cloud.appwrite.io/v1/storage/buckets/${process.env.REACT_APP_BUCKET_ID}/files/${fileId}/view?project=${process.env.REACT_APP_APPWRITE_PROJECT_ID}&mode=admin`;
+
+      return fileURL;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateCoverphoto = async () => {
+    controlCoverphotoLoading(true);
+
+    const promise = databases.updateDocument(
+      process.env.REACT_APP_APPWRITE_DATABASE_ID,
+      process.env.REACT_APP_PROFILE_COLLECTION_ID,
+      profileDocumentID,
+      {
+        coverphoto: await uploadCoverPhoto(),
+      }
+    );
+
+    promise.then(
+      function (response) {
+        console.log(response);
+        controlCoverphotoLoading(false);
+        alert("CoverPhoto Updated");
+      },
+      function (error) {
+        console.log(error);
+        controlCoverphotoLoading(false);
+      }
+    );
+  };
+
+  const updateAvatar = async () => {
+    controlAvatarLoading(true);
+    const promise = databases.updateDocument(
+      process.env.REACT_APP_APPWRITE_DATABASE_ID,
+      process.env.REACT_APP_PROFILE_COLLECTION_ID,
+      profileDocumentID,
+      {
+        avatar: await uploadAvatar(),
+      }
+    );
+
+    promise.then(
+      function (response) {
+        console.log(response);
+        controlAvatarLoading(false);
+        alert("Avatar Updated");
+      },
+      function (error) {
+        console.log(error);
+        controlAvatarLoading(false);
+      }
+    );
+  };
+
+  const updateName = () => {
+    if (name === "") {
+      alert("Name must not be empty");
+    } else {
+      controlNameLoading(true);
+      const promise = databases.updateDocument(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID,
+        profileDocumentID,
+        {
+          name: name,
+        }
+      );
+
+      promise.then(
+        function (response) {
+          console.log(response);
+          controlNameLoading(false);
+          alert("Name Updated");
+        },
+        function (error) {
+          console.log(error);
+          controlNameLoading(false);
+        }
+      );
+    }
+  };
+
+  const updateBio = () => {
     if (bio == "") {
       alert("Your bio must not be empty");
     } else {
       controlBioLoading(true);
-      const myHeaders = new Headers();
-      myHeaders.append(
-        "x-access-token",
-        auth_state.token || localStorage.getItem("token")
+      const promise = databases.updateDocument(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID,
+        profileDocumentID,
+        {
+          bio: bio,
+        }
       );
-      myHeaders.append("Content-Type", "application/json");
-      fetch(`${url}/update_bio`, {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify({ bio: bio })
-      })
-        .then(res => res.json())
-        .then(data => {
+
+      promise.then(
+        function (response) {
+          console.log(response);
           controlBioLoading(false);
-          alert(data.message);
-        })
-        .catch(err => {
-          console.log(err);
+          alert("Bio Updated");
+        },
+        function (error) {
+          console.log(error);
           controlBioLoading(false);
-        });
+        }
+      );
     }
   };
 
@@ -174,7 +199,7 @@ const EditProfile = () => {
     <MainContainer style={{ backgroundColor: theme_state.background }}>
       <Fade bottom duration={900} distance="40px">
         <ContentConatainer>
-          {profile_state.profile.map(profile => (
+          {profile_state.profile.map((profile) => (
             <ProfileContainer>
               <CoverPhoto
                 src={
@@ -195,15 +220,17 @@ const EditProfile = () => {
                     <Icon.CheckCircle
                       style={{ marginRight: 10 }}
                       color={theme_state.color}
-                      onClick={() => update_coverphoto()}
+                      onClick={updateCoverphoto}
                     />
                   ) : (
-                    <div>Loading...</div>
+                    <div style={{ fontWeight: "bold", color: "#ffff" }}>
+                      Loading...
+                    </div>
                   )
                 ) : null}
               </label>
               <UserImg
-                src={user_img_selected ? user_imgPreview : profile.user_img}
+                src={user_img_selected ? user_imgPreview : profile.avatar}
               />
               <label style={{ alignSelf: "center", marginTop: -10 }}>
                 <FileInput
@@ -214,10 +241,10 @@ const EditProfile = () => {
                 <Icon.Camera color={theme_state.color} />
               </label>
               <label style={{ alignSelf: "center", marginTop: 10 }}>
-                {!user_img_selected ? null : !loadingUser_img ? (
+                {!user_img_selected ? null : !loadingAvatar ? (
                   <Icon.CheckCircle
                     color={theme_state.color}
-                    onClick={() => update_user_img()}
+                    onClick={updateAvatar}
                   />
                 ) : (
                   <div style={{ color: theme_state.color }}>Loading...</div>
@@ -233,7 +260,7 @@ const EditProfile = () => {
                 />
                 {!loadingName ? (
                   <Icon.CheckCircle
-                    onClick={() => update_name()}
+                    onClick={updateName}
                     style={{ marginTop: 20, marginLeft: 10 }}
                     color={theme_state.color}
                   />
@@ -251,7 +278,7 @@ const EditProfile = () => {
                 />
                 {!loadingBio ? (
                   <Icon.CheckCircle
-                    onClick={() => update_bio()}
+                    onClick={() => updateBio()}
                     style={{ marginTop: 20, marginLeft: 10 }}
                     color={theme_state.color}
                   />

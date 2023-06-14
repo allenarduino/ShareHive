@@ -45,7 +45,10 @@ const SingleProfile = () => {
         [Query.equal("userID", user_id)]
       );
       console.log(userResponse);
-      post_dispatch({ type: "FETCH_USER", payload: userResponse.documents });
+      profile_dispatch({
+        type: "FETCH_CURRENT_USER",
+        payload: userResponse.documents,
+      });
       profile_dispatch({
         type: "FETCH_PROFILE",
         payload: userResponse.documents,
