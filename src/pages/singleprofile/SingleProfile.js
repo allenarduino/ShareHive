@@ -69,7 +69,7 @@ const SingleProfile = () => {
   };
   React.useEffect(() => {
     fetch_user();
-  }, []);
+  }, [profile_state.profile]);
 
   return (
     <>
