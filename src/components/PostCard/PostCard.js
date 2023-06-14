@@ -170,7 +170,7 @@ const PostCard = ({ post }) => {
                 }}
               ></Date>
             </LineBox>
-            {post.userID == auth_state.userID ? (
+            {post.userID === auth_state.userID ? (
               <Icon.Trash
                 onClick={() => delete_post(post.$id)}
                 style={{ color: "#e3405f" }}

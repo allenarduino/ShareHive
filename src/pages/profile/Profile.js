@@ -2,20 +2,18 @@ import React from "react";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { ProfileContext } from "../../contexts/ProfileContextProvider";
 import { ThemeContext } from "../../contexts/ThemeContextProvider";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import PostCard from "../../components/PostCard/PostCard";
 import { Fade } from "react-reveal";
 
 import {
-  ContentContainer,
   ProfileContainer,
   CoverPhoto,
   UserImg,
   FullName,
   Bio,
   EditProfileButton,
-  Middle,
 } from "./styles";
 import { databases } from "../../appwrite/appwriteConfig";
 import { Query } from "appwrite";
@@ -23,68 +21,56 @@ import { PostContext } from "../../contexts/PostContextProvider";
 
 const Profile = () => {
   const history = useHistory();
-  const { auth_state } = React.useContext(AuthContext);
+  const location = useLocation();
   const { profile_state, profile_dispatch } = React.useContext(ProfileContext);
-  const { post_state, post_dispatch } = React.useContext(PostContext);
+  const { post_dispatch } = React.useContext(PostContext);
   const { theme_state } = React.useContext(ThemeContext);
+
+  const user_id = location.state.user_id;
 
   const fetch_user = async () => {
     try {
-      //fetch profile
-      const usersResponse = await databases.listDocuments(
-        process.env.REACT_APP_APPWRITE_DATABASE_ID,
-        process.env.REACT_APP_PROFILE_COLLECTION_ID,
-        [Query.equal("userID", auth_state.userID)]
-      );
-      console.log(usersResponse);
-      console.log(auth_state.userID);
-      profile_dispatch({
-        type: "FETCH_PROFILE",
-        payload: usersResponse.documents,
-      });
-
-      post_dispatch({ type: "FETCH_USER", payload: usersResponse.documents });
-
-      //Fetch posts
+      // Fetch user profile posts
       const postsResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_POST_COLLECTION_ID,
-        [Query.equal("userID", auth_state.userID)]
+        [Query.equal("userID", user_id)],
+        [Query.orderDesc("$createdAt")]
       );
 
-      const posts = postsResponse.documents.map((post) => ({
-        $id: post.$id,
-        userID: post.userID,
-        postCaption: post.postCaption,
-        postMedia: post.postMedia,
-        createdAt: post.createdAt,
-      }));
+      //Fetch current user info.
+      const userResponse = await databases.listDocuments(
+        process.env.REACT_APP_APPWRITE_DATABASE_ID,
+        process.env.REACT_APP_PROFILE_COLLECTION_ID,
+        [Query.equal("userID", user_id)]
+      );
+      console.log(userResponse);
+      post_dispatch({ type: "FETCH_USER", payload: userResponse.documents });
+      profile_dispatch({
+        type: "FETCH_PROFILE",
+        payload: userResponse.documents,
+      });
 
-      const userIds = [...new Set(posts.map((post) => post.userID))];
-      const users = usersResponse.documents.reduce((acc, user) => {
-        acc[user.userID] = {
-          name: user.name,
-          avatar: user.avatar,
-          coverphoto: user.coverphoto,
-        };
-        return acc;
-      }, {});
+      //Merge and group the posts and users
+      const mergePostsAndUsers = (posts, users) => {
+        return posts.documents.map((post) => {
+          const user = users.documents.find(
+            (user) => user.userID === post.userID
+          );
+          return { ...post, ...user };
+        });
+      };
 
-      // Merge posts and users
-      const postsWithUsers = posts.map((post) => ({
-        ...post,
-        name: users[post.userID].name,
-        avatar: users[post.userID].avatar,
-      }));
-
-      post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });
-    } catch (err) {
-      console.log(err);
+      const mergedData = mergePostsAndUsers(postsResponse, userResponse);
+      console.log(mergedData);
+      profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: mergedData });
+    } catch (error) {
+      console.error("Error fetching posts and users", error);
     }
   };
   React.useEffect(() => {
     fetch_user();
-  }, []);
+  });
 
   return (
     <>
@@ -108,10 +94,10 @@ const Profile = () => {
         ))
       )}
 
-      {post_state.posts.length == 0 ? (
+      {profile_state.profilePosts.length === 0 ? (
         <Loader />
       ) : (
-        post_state.posts.map((post) => (
+        profile_state.profilePosts.map((post) => (
           <Fade bottom duration={900} distance="40px">
             <PostCard post={post} />
           </Fade>

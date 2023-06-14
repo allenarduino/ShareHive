@@ -3,19 +3,19 @@ export const profileReducer = (state, action) => {
     case "FETCH_PROFILE":
       return {
         ...state,
-        profile: action.payload
+        profile: action.payload,
       };
-    case "FETCH_USER_POSTS":
+    case "FETCH_PROFILE_POSTS":
       return {
         ...state,
-        user_posts: action.payload
+        profilePosts: action.payload,
       };
     case "DELETE_POST":
       return {
         ...state,
-        user_posts: state.user_posts.filter(
-          post => post.p_id !== action.payload
-        )
+        profilePosts: state.profilePosts.filter(
+          (post) => post.p_id !== action.payload
+        ),
       };
 
     default:

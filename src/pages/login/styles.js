@@ -19,13 +19,14 @@ export const LoginBackground = styled.div`
 
 export const LoginGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 2fr;
   width: 90%;
   align-items: center;
   height: auto;
 
   @media (max-width: ${800}px) {
     grid-template-columns: 1fr;
+    width: 95%;
   }
 `;
 export const LoginContainer = styled.div`
@@ -67,7 +68,7 @@ export const LoginInput = styled.input`
   color: #ffff;
 
   @media (max-width: ${800}px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 

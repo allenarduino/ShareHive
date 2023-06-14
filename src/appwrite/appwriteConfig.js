@@ -3,7 +3,7 @@ export const client = new Client();
 
 // Configure the endpoint and project ID
 client
-  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setEndpoint(process.env.REACT_APP_APPWRITE_PROJECT_ENDPOINT)
   .setProject(process.env.REACT_APP_APPWRITE_PROJECT_ID);
 
 export const account = new Account(client);

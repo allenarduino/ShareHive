@@ -4,10 +4,10 @@ import { profileReducer } from "../reducers/ProfileReducer";
 export const ProfileContext = React.createContext();
 const initialState = {
   profile: [],
-  user_posts: []
+  profilePosts: [],
 };
 
-const PostContextProvider = props => {
+const PostContextProvider = (props) => {
   const [profile_state, profile_dispatch] = React.useReducer(
     profileReducer,
     initialState

@@ -58,4 +58,5 @@ export const MiddleColumn = styled.div`
   justify-content: center;
   overflow: hidden;
   width: 100%;
+  padding-bottom: 100px;
 `;

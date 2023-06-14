@@ -20,37 +20,29 @@ const Home = () => {
         process.env.REACT_APP_POST_COLLECTION_ID,
         [Query.orderDesc("$createdAt")]
       );
-      const posts = postsResponse.documents.map((post) => ({
-        $id: post.$id,
-        userID: post.userID,
-        postCaption: post.postCaption,
-        postMedia: post.postMedia,
-        createdAt: post.createdAt,
-        type: post.type,
-      }));
 
       // Fetch users
-      const userIds = [...new Set(posts.map((post) => post.userID))];
       const usersResponse = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_PROFILE_COLLECTION_ID
       );
-      const users = usersResponse.documents.reduce((acc, user) => {
-        acc[user.userID] = {
-          name: user.name,
-          avatar: user.avatar,
-          coverphoto: user.coverphoto,
-        };
-        return acc;
-      }, {});
+      console.log(usersResponse);
 
-      // Merge posts and users
-      const postsWithUsers = posts.map((post) => ({
-        ...post,
-        name: users[post.userID].name,
-        avatar: users[post.userID].avatar,
-      }));
+      //Merge and group the posts and users
+      const mergePostsAndUsers = (posts, users) => {
+        return posts.documents.map((post) => {
+          const user = users.documents.find(
+            (user) => user.userID === post.userID
+          );
+          return { ...post, ...user };
+        });
+      };
 
+      const mergedData = mergePostsAndUsers(postsResponse, usersResponse);
+      console.log(JSON.stringify(mergedData));
+      post_dispatch({ type: "FETCH_POSTS", payload: mergedData });
+
+      //Fetch current user info.
       const response = await databases.listDocuments(
         process.env.REACT_APP_APPWRITE_DATABASE_ID,
         process.env.REACT_APP_PROFILE_COLLECTION_ID,
@@ -58,19 +50,17 @@ const Home = () => {
       );
       console.log(response);
       post_dispatch({ type: "FETCH_USER", payload: response.documents });
-
-      console.log(postsWithUsers);
-      post_dispatch({ type: "FETCH_POSTS", payload: postsWithUsers });
     } catch (error) {
       console.error("Error fetching posts and users", error);
     }
   };
+
   React.useEffect(() => {
     fetch_posts();
   }, []);
   return (
     <>
-      {post_state.posts.length == 0 ? (
+      {post_state.posts.length === 0 ? (
         <Loader />
       ) : (
         post_state.posts.map((post) => (

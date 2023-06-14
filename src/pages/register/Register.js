@@ -87,10 +87,9 @@ const Register = () => {
       );
       console.log(response);
       await account.createEmailSession(values.email, values.password);
-      populateProfile(response.$id, response.name, avatar, coverphoto);
-      window.localStorage.setItem("userID", response.$id);
-      controlLoading(false);
       auth_dispatch({ type: "LOGIN", payload: response.$id });
+      populateProfile(response.$id, response.name, avatar, coverphoto);
+      controlLoading(false);
       history.push("/");
     } catch (error) {
       if (error.code === 409) {
