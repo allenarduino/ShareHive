@@ -99,15 +99,11 @@ const SingleProfile = () => {
         ))
       )}
 
-      {profile_state.profilePosts.length === 0 ? (
-        <Loader />
-      ) : (
-        profile_state.profilePosts.map((post) => (
-          <Fade bottom duration={900} distance="40px">
-            <PostCard post={post} />
-          </Fade>
-        ))
-      )}
+      {profile_state.profilePosts.map((post) => (
+        <Fade bottom duration={900} distance="40px">
+          <PostCard post={post} />
+        </Fade>
+      ))}
     </>
   );
 };

@@ -253,7 +253,7 @@ const EditProfile = () => {
 
               <InputContainer>
                 <NameInput
-                  placeholder={profile.full_name}
+                  placeholder={profile.name}
                   className="form-control"
                   onChange={handle_name_change}
                   value={name}

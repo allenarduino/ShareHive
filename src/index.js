@@ -9,6 +9,7 @@ import ThemeContext from "./contexts/ThemeContextProvider";
 import ProfileContext from "./contexts/ProfileContextProvider";
 import SelectMediaContext from "./contexts/SelectMediaContextProvider";
 import CommentContext from "./contexts/CommentContextProvider";
+
 ReactDOM.render(
   <PostContext>
     <AuthContext>
