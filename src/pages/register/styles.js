@@ -26,14 +26,18 @@ export const LoginGrid = styled.div`
 
   @media (max-width: ${800}px) {
     grid-template-columns: 1fr;
+    width: 95%;
+    max-width: 500px;
+  }
+
+  @media (max-width: ${600}px) {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 500px;
   }
 `;
 
-export const LoginContainer = styled.div`
-  padding-top: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
-`;
+export const LoginContainer = styled.div``;
 
 export const LoginHeaderText = styled.h4`
   text-align: center;
@@ -45,14 +49,6 @@ export const LoginHeaderText = styled.h4`
     font-size: 25px;
   }
 `;
-
-/*export const Form = styled.form.attrs({
-  className: "form-group",
-})`
-  border-radius: 3px;
-  padding: 0 10px;
-  padding-top: 3px;
-`;*/
 
 export const Form = styled.div`
   border-radius: 3px;
