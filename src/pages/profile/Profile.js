@@ -58,7 +58,7 @@ const Profile = () => {
           const user = users.documents.find(
             (user) => user.userID === post.userID
           );
-          return { ...post, ...user };
+          return { ...post, post_id: post.$id, ...user };
         });
       };
 
