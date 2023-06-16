@@ -102,45 +102,59 @@ const PostCard = ({ post }) => {
     const newPost = post_state.posts.map((post) => {
       const postLikesArray = post.postLikes;
       if (post.post_id === postID) {
-        postLikesArray.push(userID); // Add the userID to the postLikes array
+        // Add the userID to the postLikes array
+        postLikesArray.push(userID);
       }
       console.log(post.$id);
+      //Sending postLikes details to server
       updatePostLikes(postLikesArray, post.post_id);
       return { ...post, postLikes: postLikesArray };
     });
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
     console.log(newPost.postLikes);
 
-    /* const newProfilePost = profile_state.profilePosts.map((post) => {
+    const newProfilePost = profile_state.profilePosts.map((post) => {
       const postLikesArray = post.postLikes;
-      if (post.$id === postID) {
-        postLikesArray.push(userID); // Add the userID to the postLikes array
+      if (post.post_id === postID) {
+        // Add the userID to the postLikes array
+        postLikesArray.push(userID);
       }
       return { ...post, postLikes: postLikesArray };
     });
-    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });*/
-
-    //Sending like details to server
+    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
   };
 
   //For unliking a post
-  const unlike = (userID) => {
+  const unlike = (userID, postID) => {
     const newPost = post_state.posts.map((post) => {
-      const postLikesArray = post.postLikes.filter((id) => id !== userID);
-      updatePostLikes(postLikesArray, post.$id);
+      let postLikesArray = post.postLikes;
+
+      if (post.post_id === postID) {
+        postLikesArray = post.postLikes.filter((id) => id !== userID);
+        // Sending postLikes details to server
+        updatePostLikes(postLikesArray, post.post_id);
+        console.log(post.post_id);
+      }
+
       return { ...post, postLikes: postLikesArray };
     });
 
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
 
     const newProfilePost = post_state.posts.map((post) => {
-      const postLikesArray = post.postLikes.filter((id) => id !== userID);
+      let postLikesArray = post.postLikes;
+
+      if (post.post_id === postID) {
+        postLikesArray = post.postLikes.filter((id) => id !== userID);
+        // Sending postLikes details to server
+        updatePostLikes(postLikesArray, post.post_id);
+        console.log(post.post_id);
+      }
+
       return { ...post, postLikes: postLikesArray };
     });
 
     profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
-
-    //Sending like details to server
   };
 
   const delete_post = (id) => {
@@ -240,7 +254,7 @@ const PostCard = ({ post }) => {
                 className={pulse ? "heart" : "null"}
                 fill="red"
                 onClick={() => {
-                  unlike(auth_state.userID);
+                  unlike(auth_state.userID, post.post_id);
                   onClick();
                 }}
                 className={className}
