@@ -36,7 +36,9 @@ export const NavOptionItem = styled.div`
   width: 100%;
   align-self: flex-start;
   &:hover {
-    font-size: 22px;
+    font-size: 21px;
+    color: brown;
+    font-weight: 400;
   }
 `;
 
