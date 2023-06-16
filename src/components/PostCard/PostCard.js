@@ -240,15 +240,7 @@ const PostCard = ({ post }) => {
               {post.postLikes.length > 0 && post.postLikes.length}
             </b>
 
-            <Icon.MessageCircle
-              onClick={() =>
-                history.push("/comment_page", {
-                  post_media: post.post_media,
-                  post_id: post.p_id,
-                  is_video: post.is_video,
-                })
-              }
-            />
+            <Icon.MessageCircle />
             <b style={{ fontSize: 18 }}>{post.total_comments}</b>
           </Line4>
         </PostCardContent>

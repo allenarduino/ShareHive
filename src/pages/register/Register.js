@@ -25,12 +25,14 @@ import {
   LoginImageCol,
   LoginImage,
 } from "./styles";
+import { ProfileContext } from "../../contexts/ProfileContextProvider";
 
 const Register = () => {
   const { theme_state } = React.useContext(ThemeContext);
 
   const history = useHistory();
   const { auth_dispatch } = React.useContext(AuthContext);
+  const { profile_dispatch } = React.useContext(ProfileContext);
   const [error, setError] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
   const RegistrationSchema = Yup.object().shape({
@@ -90,6 +92,10 @@ const Register = () => {
       auth_dispatch({ type: "LOGIN", payload: response.$id });
       populateProfile(response.$id, response.name, avatar, coverphoto);
       controlLoading(false);
+      profile_dispatch({
+        type: "FETCH_CURRENT_USER",
+        payload: [{ name: response.name, avatar: response.avatar }],
+      });
       history.push("/");
     } catch (error) {
       if (error.code === 409) {

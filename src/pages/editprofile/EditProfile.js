@@ -212,13 +212,16 @@ const EditProfile = () => {
                   onChange={handle_coverphoto_change}
                   accept="image/x-png,image/jpeg,image/jpg"
                 />
-                <Icon.Camera color={theme_state.color} />
+                <Icon.Camera
+                  color={theme_state.color}
+                  style={{ cursor: "pointer" }}
+                />
               </label>
               <label style={{ alignSelf: "flex-end", marginTop: 10 }}>
                 {coverphoto_selected ? (
                   !loadingCoverphoto ? (
                     <Icon.CheckCircle
-                      style={{ marginRight: 10 }}
+                      style={{ marginRight: 10, cursor: "pointer" }}
                       color={theme_state.color}
                       onClick={updateCoverphoto}
                     />
@@ -238,12 +241,16 @@ const EditProfile = () => {
                   onChange={handle_user_img_change}
                   accept="image/x-png,image/jpeg,image/jpg"
                 />
-                <Icon.Camera color={theme_state.color} />
+                <Icon.Camera
+                  color={theme_state.color}
+                  style={{ cursor: "pointer" }}
+                />
               </label>
               <label style={{ alignSelf: "center", marginTop: 10 }}>
                 {!user_img_selected ? null : !loadingAvatar ? (
                   <Icon.CheckCircle
                     color={theme_state.color}
+                    style={{ cursor: "pointer" }}
                     onClick={updateAvatar}
                   />
                 ) : (
@@ -261,7 +268,7 @@ const EditProfile = () => {
                 {!loadingName ? (
                   <Icon.CheckCircle
                     onClick={updateName}
-                    style={{ marginTop: 20, marginLeft: 10 }}
+                    style={{ marginTop: 20, marginLeft: 10, cursor: "pointer" }}
                     color={theme_state.color}
                   />
                 ) : (
@@ -279,7 +286,7 @@ const EditProfile = () => {
                 {!loadingBio ? (
                   <Icon.CheckCircle
                     onClick={() => updateBio()}
-                    style={{ marginTop: 20, marginLeft: 10 }}
+                    style={{ marginTop: 20, marginLeft: 10, cursor: "pointer" }}
                     color={theme_state.color}
                   />
                 ) : (

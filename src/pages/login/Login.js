@@ -24,12 +24,14 @@ import {
   LoginImageCol,
   LoginImage,
 } from "./styles";
+import { ProfileContext } from "../../contexts/ProfileContextProvider";
 
 const Login = () => {
   const { theme_state } = React.useContext(ThemeContext);
 
   const history = useHistory();
   const { auth_dispatch } = React.useContext(AuthContext);
+  const { profile_dispatch } = React.useContext(ProfileContext);
   const [error, setError] = React.useState("");
   const [loading, controlLoading] = React.useState(false);
   const LoginSchema = Yup.object().shape({
@@ -53,6 +55,10 @@ const Login = () => {
       console.log(response);
       controlLoading(false);
       auth_dispatch({ type: "LOGIN", payload: response.$id });
+      profile_dispatch({
+        type: "FETCH_CURRENT_USER",
+        payload: [{ name: response.name, avatar: response.avatar }],
+      });
 
       history.push("/");
     } catch (error) {
