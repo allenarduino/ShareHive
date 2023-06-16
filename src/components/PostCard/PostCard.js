@@ -85,20 +85,34 @@ const PostCard = ({ post }) => {
       return { ...post, postLikes: postLikesArray };
     });
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
-    console.log(newPost);
+
+    const newProfilePost = profile_state.profilePosts.map((post) => {
+      const postLikesArray = post.postLikes;
+      if (post.$id === postID) {
+        postLikesArray.push(userID); // Add the userID to the postLikes array
+      }
+      return { ...post, postLikes: postLikesArray };
+    });
+    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
 
     //Sending like details to server
   };
 
   //For unliking a post
-  const unlike = (userID, postID) => {
+  const unlike = (userID) => {
     const newPost = post_state.posts.map((post) => {
       const postLikesArray = post.postLikes.filter((id) => id !== userID);
       return { ...post, postLikes: postLikesArray };
     });
 
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
-    console.log(newPost);
+
+    const newProfilePost = post_state.posts.map((post) => {
+      const postLikesArray = post.postLikes.filter((id) => id !== userID);
+      return { ...post, postLikes: postLikesArray };
+    });
+
+    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
 
     //Sending like details to server
   };
