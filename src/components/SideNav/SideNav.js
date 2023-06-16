@@ -12,13 +12,14 @@ import {
 } from "./styles";
 import { AuthContext } from "../../contexts/AuthContextProvider";
 import { account } from "../../appwrite/appwriteConfig";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 export const SideNav = () => {
   const { theme_state } = React.useContext(ThemeContext);
   const { auth_dispatch } = React.useContext(AuthContext);
   const [loading, controlLoading] = React.useState(false);
   const history = useHistory();
+  const location = useLocation();
 
   const logout = async () => {
     try {
@@ -37,6 +38,7 @@ export const SideNav = () => {
     <>
       <SideNavContainer>
         <NavOptionContainer
+          onClick={() => history.push("/")}
           style={{
             borderBottom: `1px solid ${theme_state.border}`,
           }}
@@ -48,20 +50,34 @@ export const SideNav = () => {
               textDecoration: "none",
             }}
           >
-            <NavOptionItem style={{ color: theme_state.color }}>
-              <Icon.Home size={25} style={{ marginRight: 30 }} />
+            <NavOptionItem
+              style={{
+                color: theme_state.color,
+              }}
+            >
+              <Icon.Home
+                size={25}
+                style={{
+                  marginRight: 30,
+                }}
+              />
               Home
             </NavOptionItem>
           </Link>
         </NavOptionContainer>
 
         <NavOptionContainer
+          onClick={() => history.push("/profile")}
           style={{
             borderBottom: `1px solid ${theme_state.border}`,
           }}
         >
           <Link to="/profile" style={{ textDecoration: "none" }}>
-            <NavOptionItem style={{ color: theme_state.color }}>
+            <NavOptionItem
+              style={{
+                color: theme_state.color,
+              }}
+            >
               <Icon.User size={25} style={{ marginRight: 30 }} />
               Profile
             </NavOptionItem>

@@ -56,12 +56,18 @@ const SettingsPopOver = () => {
           <Img
             src={Dark}
             onClick={() => set_dark_theme()}
-            style={{ border: theme_state.is_dark ? "3px solid #e3405f " : "" }}
+            style={{
+              border: theme_state.is_dark ? "3px solid #e3405f " : "",
+              cursor: "pointer",
+            }}
           />
           <Img
             src={Light}
             onClick={() => set_light_theme()}
-            style={{ border: theme_state.is_dark ? "" : "3px solid #e3405f " }}
+            style={{
+              border: theme_state.is_dark ? "" : "3px solid #e3405f ",
+              cursor: "pointer",
+            }}
           />
         </Spacer>
       </Choices>

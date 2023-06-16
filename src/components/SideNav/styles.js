@@ -25,6 +25,7 @@ export const NavOptionContainer = styled.div`
   padding-left: 100px;
   align-items: center;
   position: relative;
+  cursor: pointer;
 `;
 
 export const NavOptionItem = styled.div`
@@ -32,7 +33,11 @@ export const NavOptionItem = styled.div`
   font-weight: bold;
   display: flex;
   justify-content: flex-start;
+  width: 100%;
   align-self: flex-start;
+  &:hover {
+    font-size: 22px;
+  }
 `;
 
 export const LogoutButtonContainer = styled.div`
