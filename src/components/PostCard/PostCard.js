@@ -75,25 +75,50 @@ const PostCard = ({ post }) => {
   const className = pulse ? classes.liked : classes.like;
   const onClick = pulse ? handleUnlike : handleLike;
 
+  //Function for sending postLikes details to server
+  const updatePostLikes = (postLikesArray, postDocumentID) => {
+    const promise = databases.updateDocument(
+      process.env.REACT_APP_APPWRITE_DATABASE_ID,
+      process.env.REACT_APP_POST_COLLECTION_ID,
+      postDocumentID,
+      {
+        postLikes: postLikesArray,
+      }
+    );
+
+    promise.then(
+      function (response) {
+        console.log(response);
+      },
+      function (error) {
+        console.log(error);
+        console.log(postDocumentID);
+      }
+    );
+  };
+
   //For liking a post
   const like = (userID, postID) => {
     const newPost = post_state.posts.map((post) => {
       const postLikesArray = post.postLikes;
-      if (post.$id === postID) {
+      if (post.post_id === postID) {
         postLikesArray.push(userID); // Add the userID to the postLikes array
       }
+      console.log(post.$id);
+      updatePostLikes(postLikesArray, post.post_id);
       return { ...post, postLikes: postLikesArray };
     });
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
+    console.log(newPost.postLikes);
 
-    const newProfilePost = profile_state.profilePosts.map((post) => {
+    /* const newProfilePost = profile_state.profilePosts.map((post) => {
       const postLikesArray = post.postLikes;
       if (post.$id === postID) {
         postLikesArray.push(userID); // Add the userID to the postLikes array
       }
       return { ...post, postLikes: postLikesArray };
     });
-    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
+    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });*/
 
     //Sending like details to server
   };
@@ -102,6 +127,7 @@ const PostCard = ({ post }) => {
   const unlike = (userID) => {
     const newPost = post_state.posts.map((post) => {
       const postLikesArray = post.postLikes.filter((id) => id !== userID);
+      updatePostLikes(postLikesArray, post.$id);
       return { ...post, postLikes: postLikesArray };
     });
 
@@ -166,7 +192,7 @@ const PostCard = ({ post }) => {
             </LineBox>
             {post.userID === auth_state.userID ? (
               <Icon.Trash
-                onClick={() => delete_post(post.$id)}
+                onClick={() => delete_post(post.post_id)}
                 style={{ color: "#e3405f", cursor: "pointer" }}
               />
             ) : null}
@@ -203,7 +229,7 @@ const PostCard = ({ post }) => {
                 color={theme_state.color}
                 className={className}
                 onClick={() => {
-                  like(auth_state.userID, post.$id);
+                  like(auth_state.userID, post.post_id);
                   onClick();
                 }}
                 style={{ cursor: "pointer" }}
@@ -214,7 +240,7 @@ const PostCard = ({ post }) => {
                 className={pulse ? "heart" : "null"}
                 fill="red"
                 onClick={() => {
-                  unlike(auth_state.userID, post.$id);
+                  unlike(auth_state.userID);
                   onClick();
                 }}
                 className={className}
