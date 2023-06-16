@@ -5,11 +5,7 @@ export const profileReducer = (state, action) => {
         ...state,
         profile: action.payload,
       };
-    case "FETCH_PROFILE_POSTS":
-      return {
-        ...state,
-        profilePosts: action.payload,
-      };
+
     case "FETCH_CURRENT_USER":
       return {
         ...state,

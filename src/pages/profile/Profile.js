@@ -23,7 +23,7 @@ const Profile = () => {
   const history = useHistory();
   const { auth_state } = React.useContext(AuthContext);
   const { profile_state, profile_dispatch } = React.useContext(ProfileContext);
-  const { post_dispatch } = React.useContext(PostContext);
+  const { post_state, post_dispatch } = React.useContext(PostContext);
   const { theme_state } = React.useContext(ThemeContext);
 
   const fetch_user = async () => {
@@ -64,7 +64,7 @@ const Profile = () => {
 
       const mergedData = mergePostsAndUsers(postsResponse, userResponse);
       console.log(mergedData);
-      profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: mergedData });
+      post_dispatch({ type: "FETCH_POSTS", payload: mergedData });
     } catch (error) {
       console.error("Error fetching posts and users", error);
     }
@@ -95,7 +95,7 @@ const Profile = () => {
         ))
       )}
 
-      {profile_state.profilePosts.map((post) => (
+      {post_state.posts.map((post) => (
         <Fade bottom duration={900} distance="40px">
           <PostCard post={post} />
         </Fade>

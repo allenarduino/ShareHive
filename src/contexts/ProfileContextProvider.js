@@ -4,7 +4,6 @@ import { profileReducer } from "../reducers/ProfileReducer";
 export const ProfileContext = React.createContext();
 const initialState = {
   profile: [],
-  profilePosts: [],
   currentUserDetails: [],
 };
 

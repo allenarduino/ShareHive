@@ -112,16 +112,6 @@ const PostCard = ({ post }) => {
     });
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
     console.log(newPost.postLikes);
-
-    const newProfilePost = profile_state.profilePosts.map((post) => {
-      const postLikesArray = post.postLikes;
-      if (post.post_id === postID) {
-        // Add the userID to the postLikes array
-        postLikesArray.push(userID);
-      }
-      return { ...post, postLikes: postLikesArray };
-    });
-    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
   };
 
   //For unliking a post
@@ -140,21 +130,6 @@ const PostCard = ({ post }) => {
     });
 
     post_dispatch({ type: "FETCH_POSTS", payload: newPost });
-
-    const newProfilePost = post_state.posts.map((post) => {
-      let postLikesArray = post.postLikes;
-
-      if (post.post_id === postID) {
-        postLikesArray = post.postLikes.filter((id) => id !== userID);
-        // Sending postLikes details to server
-        updatePostLikes(postLikesArray, post.post_id);
-        console.log(post.post_id);
-      }
-
-      return { ...post, postLikes: postLikesArray };
-    });
-
-    profile_dispatch({ type: "FETCH_PROFILE_POSTS", payload: newProfilePost });
   };
 
   const delete_post = (id) => {
