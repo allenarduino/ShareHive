@@ -12,7 +12,71 @@ Context API and useReducer hooks for global state management
 
 Styled Components for styling
 
-How Appwrite Helped: Appwrite played a vital role in the development of ShareHive, providing a robust backend architecture that allowed me to focus on the front end and user interface. Leveraging Appwrite's powerful features, I could seamlessly implement functionalities such as image upload, authentication management, and database management without worrying about the complexities of setting up and maintaining my backend infrastructure. Appwrite's documentation and easy-to-use APIs enabled me to integrate these features smoothly into my application, saving me significant development time and effort.
+# Demo Screenshots
+
+<img
+width="500"
+alt="Capture 1"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive1.PNG">
+
+<img
+width="500"
+alt="Capture 2"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive2.PNG">
+
+<img
+width="500"
+alt="Capture 3"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive3.PNG">
+
+<img
+width="500"
+alt="Capture 3"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive3.PNG">
+
+<img
+width="270"
+alt="Capture 4"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive4.PNG">
+
+<img
+width="500"
+alt="Capture 5"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive5.PNG">
+
+<img
+width="500"
+alt="Capture 6"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive6.PNG">
+
+<img
+width="500"
+alt="Capture 7"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive7.PNG">
+
+<img
+width="500"
+alt="Capture 8"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive8.PNG">
+
+<img
+width="500"
+alt="Capture 9"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive9.PNG">
+
+<img
+width="500"
+alt="Capture 10"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive10.PNG">
+
+<img
+width="500"
+alt="Capture 11"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive11.PNG">
+
+# How Appwrite Helped
+
+Appwrite played a vital role in the development of ShareHive, providing a robust backend architecture that allowed me to focus on the front end and user interface. Leveraging Appwrite's powerful features, I could seamlessly implement functionalities such as image upload, authentication management, and database management without worrying about the complexities of setting up and maintaining my backend infrastructure. Appwrite's documentation and easy-to-use APIs enabled me to integrate these features smoothly into my application, saving me significant development time and effort.
 
 # Challenges Faced:
 
