@@ -14,10 +14,11 @@ Styled Components for styling
 
 # Demo Screenshots
 
+<div style="width:100%; display:flex; flex-direction:column; justify-content:center;">
 <img
 width="500"
 alt="Capture 1"
-src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive1.PNG">
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive1.png">
 
 <img
 width="500"
@@ -73,6 +74,8 @@ src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/shar
 width="500"
 alt="Capture 11"
 src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive11.PNG">
+
+</div>
 
 # How Appwrite Helped
 
