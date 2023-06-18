@@ -2,7 +2,9 @@ Team Members:
 
 # Allen Jones (@allenjones)
 
-Description: ShareHive is a social networking web application that empowers users to connect, share, and engage with each other. The platform allows users to register, log in, and create various types of posts, including text, video, and image posts. With its smooth single-page functionalities, ShareHive offers a seamless user experience. The application is designed to be highly responsive, and it includes a customizable dark and light mode feature. Coming from a background in Firebase and full-stack development, I was passionate about exploring open-source contributions and discovering alternative solutions. Appwrite caught my attention as a promising Firebase alternative, and I embarked on building something great with this powerful platform. Through this project, I aimed to gain hands-on experience, identify potential challenges, and actively contribute to the Appwrite community.
+# Description:
+
+ShareHive is a social networking web application that empowers users to connect, share, and engage with each other. The platform allows users to register, log in, and create various types of posts, including text, video, and image posts. With its smooth single-page functionalities, ShareHive offers a seamless user experience. The application is designed to be highly responsive, and it includes a customizable dark and light mode feature. Coming from a background in Firebase and full-stack development, I was passionate about exploring open-source contributions and discovering alternative solutions. Appwrite caught my attention as a promising Firebase alternative, and I embarked on building something great with this powerful platform. Through this project, I aimed to gain hands-on experience, identify potential challenges, and actively contribute to the Appwrite community.
 
 # Tech Stack:
 
