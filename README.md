@@ -90,4 +90,49 @@ Appwrite played a vital role in the development of ShareHive, providing a robust
 
 During the development process, I encountered a couple of challenges that I had to overcome. One notable challenge was Appwrite's current limitation in handling complex queries like JOINS. As a result, displaying posts associated with a specific user on the home page became a challenge. To address this limitation, I developed a JavaScript function that retrieved the users' data and posts' data separately, and then merged them using JavaScript's powerful array methods like .map and .reduce. While it presented an interesting problem to solve, I am enthusiastic about contributing to the open-source project and collaborating with the Appwrite community to address this limitation and improve the querying capabilities.
 
+### The code below shows the solution:
+
+```js
+const fetch_posts = async () => {
+  try {
+    // Fetch posts
+    const postsResponse = await databases.listDocuments(
+      process.env.REACT_APP_APPWRITE_DATABASE_ID,
+      process.env.REACT_APP_POST_COLLECTION_ID,
+      [Query.orderDesc("$createdAt")]
+    );
+
+    // Fetch users
+    const usersResponse = await databases.listDocuments(
+      process.env.REACT_APP_APPWRITE_DATABASE_ID,
+      process.env.REACT_APP_PROFILE_COLLECTION_ID
+    );
+    console.log(usersResponse);
+
+    //Merge and group the posts and users
+    const mergePostsAndUsers = (posts, users) => {
+      return posts.documents.map((post) => {
+        const user = users.documents.find(
+          (user) => user.userID === post.userID
+        );
+        return { ...post, post_id: post.$id, ...user };
+      });
+    };
+
+    const mergedData = mergePostsAndUsers(postsResponse, usersResponse);
+    console.log(mergedData);
+    post_dispatch({ type: "FETCH_POSTS", payload: mergedData });
+  } catch (error) {
+    console.error("Error fetching posts and users", error);
+  }
+};
+```
+
 Another challenge I faced was ensuring a smooth user experience when redirecting users based on their authentication status (logged in or logged out). The process of determining the user's authentication status using the account.get() method introduced a slight delay in the redirection process. To address this, I implemented a clever workaround by adding a component that displayed a launcher or a blank page with the logo during the initial app launch. This provided users with visual feedback while the authentication status was being determined, improving the overall user experience and reducing confusion.
+
+### The screenshot shows the launcher page:
+
+<img
+width="500"
+alt="Capture 3"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive12.PNG">
