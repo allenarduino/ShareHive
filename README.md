@@ -18,6 +18,11 @@ Styled Components for styling
 <img
 width="500"
 alt="Capture 1"
+src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive12.PNG">
+
+<img
+width="500"
+alt="Capture 1"
 src="https://github.com/allenarduino/ShareHive/blob/master/Demo_Screenshots/sharehive1.PNG">
 
 <img
